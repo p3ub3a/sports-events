@@ -1,0 +1,119 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body{
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  font-family: 'Lora', serif;
+  overflow: hidden;
+}
+
+h1,h2,h3,h4,h5,h6,p {
+  margin: 0;
+  padding: 0;
+  color: black;
+  opacity: 0.7;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1{
+  font-size: 24px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.event-container {
+  max-height: 300px;
+  /* width: 20%; */
+  width: 80vw;
+  display:flex;
+  overflow-x: auto;
+  overflow-y:hidden;
+  opacity: 0.7;
+}
+
+.event-container .event-item{
+  min-width: 280px;
+  height: 200px;
+  line-height: 110px;
+  text-align: center;
+  background-color: cadetblue;
+  margin-right: 10px;
+}
+
+.event-item:hover{
+  background-color: #466289 !important;
+  cursor: pointer;
+}
+
+.event-container div:hover span{
+  color:white;
+  transition-duration: 0.2s;
+}
+
+.wrapper::-webkit-scrollbar{
+  width: 0;
+}
+
+.selectedEvent {
+  background-color: #466289 !important;
+  color:white;
+}
+
+.event-details{
+  display: block;
+}
+
+.button{
+  background-color: cadetblue;
+  border: none;
+  color: white;
+  padding: 5px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.button:hover{
+  cursor: pointer;
+}
+
+.participate{
+  border: 2px solid #466289;
+  color: black;
+  opacity: 0.7;
+  align-self: center;
+}
+
+.participate {
+  transition-duration: 0.4s;
+}
+
+.participate:hover {
+  background-color: #466289;
+  color: white;
+}
+
+div.settings {
+  display:grid;
+  grid-template-columns: max-content max-content;
+  grid-gap:5px;
+}
+div.settings .label       { text-align:right; }
+
+select {
+  /* margin: 10px; */
+  width: 150px;
+  padding: 5px 35px 5px 5px;
+  font-size: 16px;
+  border: 1px solid #466289;
+  height: 30px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: 96% / 15% no-repeat cadetblue;
+}

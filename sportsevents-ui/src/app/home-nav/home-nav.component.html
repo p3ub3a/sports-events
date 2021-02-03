@@ -1,0 +1,45 @@
+<!-- <p *ngFor="let event of events">
+
+  home-nav works!! {{event.status}}
+
+
+</p> -->
+
+<div class="page-container">
+  <div class="sidebar">
+    <div class="list-items">
+      <a routerLink = "" routerLinkActive = "selected" [routerLinkActiveOptions]="{exact: true}" class="list-item">
+        <i class="material-icons">home</i>
+        Home
+      </a>
+      <a routerLink = "/profile" routerLinkActive = "selected" class="list-item">
+        <i class="material-icons">account_circle</i>
+        Profile
+      </a>
+      <a routerLink = "/pastevents" routerLinkActive = "selected" class="list-item">
+        <i class="material-icons">event_available</i>
+        Past events
+      </a>
+      <a routerLink = "/leaderboard" routerLinkActive = "selected" class="list-item">
+        <i class="material-icons">leaderboard</i>
+        Leaderboard
+      </a>
+      <a *ngIf="roles.includes('admin')" routerLink = "/editevents" routerLinkActive = "selected" class="list-item">
+        <i class="material-icons">event_note</i>
+        Create event
+      </a>
+      <a *ngIf="roles.includes('admin')" routerLink = "/editusers" routerLinkActive = "selected" class="list-item">
+        <i class="material-icons">manage_accounts</i>
+        Edit users
+      </a>
+
+
+    </div>
+    <button class="button logout" (click)="logout();">logout</button>
+  </div>
+
+  <div class="page-content-container">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

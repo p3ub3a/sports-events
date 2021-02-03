@@ -1,0 +1,27 @@
+<h1>Create event</h1>
+<br/>
+<div class="form-container ">
+  <form #createEvent="ngForm" (ngSubmit)="onSubmit(createEvent)">
+    <div class="settings">
+      <span class="label">Type: </span>
+      <select class="select" name="type" id="type" placeholder="Type" ngModel>
+        <option selected value="chess" >Chess</option>
+        <option value="pingpong">Pingpong</option>
+        <option value="swimming">Swimming</option>
+        <option value="tennis">Tennis</option>
+      </select>
+      <span class="label">Facilitator: </span><input name="facilitator" type="text" ngModel/>
+      <span class="label">Scheduled date: </span><input name="scheduledDate" type="datetime" ngModel/>
+      <span class="label">Location: </span>
+      <select class="select" name="location" id="location" placeholder="Location" ngModel>
+        <option selected value="Bucharest" >Bucuresti</option>
+        <option value="Timisoara">Timisoara</option>
+        <option value="Iasi">Iasi</option>
+      </select>
+      <span class="label">Is outdoors?: </span><input name="outdoors" type="checkbox" ngModel/>
+    </div>
+    <br/><br/>
+    <button class="button participate" type="submit">Create</button>
+  </form>
+</div>
+
