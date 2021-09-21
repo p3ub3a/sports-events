@@ -91,8 +91,13 @@ public class EventServiceImpl implements EventService {
     public boolean deleteEvent(String type, Long id) {
         switch (type) {
             case "chess":
-                logger.info("Deleting event with id {} ", id);
-                return ChessEvent.deleteById(id);
+                try{
+                    logger.info("Deleting event with id {} ", id);
+                    return ChessEvent.deleteById(id);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                
             case "swimming":
                 return SwimmingEvent.deleteById(id);
             case "tennis":

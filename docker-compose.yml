@@ -1,5 +1,23 @@
 version: "3.8"
 services:
+  sportsevents-db:
+    image: "postgres"
+    mem_limit: 128m
+    environment:
+      POSTGRES_USER: sportsevents
+      POSTGRES_PASSWORD: sportsevents
+      POSTGRES_DB: sportsevents
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sportsevents"]
+      interval: 5s
+      timeout: 5s
+      retries: 6
+    ports:
+      - 5433:5432
+    volumes:
+      - "./scripts/sql/create.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./scripts/sql/insert.sql:/docker-entrypoint-initdb.d/2.sql"
+
   keycloak:
     image: jboss/keycloak:latest
     environment:
@@ -28,3 +46,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  monitoring:
+    image: "prom/prometheus"
+    container_name: "super-visor"
+    ports:
+      - 9090:9090
+    volumes:
+      - "./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml"

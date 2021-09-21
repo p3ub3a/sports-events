@@ -1,0 +1,2 @@
+insert into chess_event (id,type,duration,location,maxPlayers,outdoors,scheduledDate) 
+	VALUES (1, 'CHESS', 60, 'Bucuresti', 2, false, '2021-12-09T16:34:02'), (2, 'CHESS', 60, 'Bucuresti', 2, false, '2021-12-09T16:34:03' );

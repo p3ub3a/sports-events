@@ -60,7 +60,7 @@ public class EventsResource {
     }
 
     @PATCH
-    // @RolesAllowed({"player"})
+    @RolesAllowed({"player"})
     @Path("/addPlayer")
     public Response addPlayer(@Valid UpdatePlayersModel updatePlayersModel){
 
