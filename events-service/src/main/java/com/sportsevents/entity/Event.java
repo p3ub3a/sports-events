@@ -2,11 +2,13 @@ package com.sportsevents.entity;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
-@MappedSuperclass
+@Entity
+@Table(name = "event")
 public class Event extends PanacheEntity{
     private String name;
     private String type;
@@ -22,38 +24,152 @@ public class Event extends PanacheEntity{
     private String[] players;
     private int maxPlayers;
 
+    public Event(){}
+
+    private Event(EventBuilder builder){
+        this.setName(builder.name);
+        this.setScheduledDate(builder.scheduledDate);
+        this.setDuration(builder.duration);
+        this.setOutdoors(builder.isOutdoors);
+        this.setClosedDate(builder.closedDate);
+        this.setFacilitator(builder.facilitator);
+        this.setClosedBy(builder.closedBy);
+        this.setLocation(builder.location);
+        this.setStatus(builder.status);
+        this.setType(builder.type);
+        this.setMaxPlayers(builder.maxPlayers);
+    }
+
+    public static class EventBuilder {
+        private String name;
+        private LocalDateTime scheduledDate;
+        private int duration;
+        private boolean isOutdoors;
+        private LocalDateTime closedDate;
+        private String facilitator;
+        private String closedBy;
+        private String location;
+        private String status;
+        private String type;
+        private String[] players;
+        private int maxPlayers;
+    
+        public EventBuilder name(String name){
+            this.name = name;
+            return this;
+        }
+    
+        public EventBuilder scheduledDate(LocalDateTime scheduledDate){
+            this.scheduledDate = scheduledDate;
+            return this;
+        }
+    
+        public EventBuilder duration(int duration){
+            this.duration = duration;
+            return this;
+        }
+    
+        public EventBuilder isOutdoors(boolean isOutdoors){
+            this.isOutdoors = isOutdoors;
+            return this;
+        }
+
+        public EventBuilder closedDate(LocalDateTime closedDate){
+            this.closedDate = closedDate;
+            return this;
+        }
+
+        public EventBuilder facilitator(String facilitator){
+            this.facilitator = facilitator;
+            return this;
+        }
+
+        public EventBuilder closedBy(String closedBy){
+            this.closedBy = closedBy;
+            return this;
+        }
+
+        public EventBuilder location(String location){
+            this.location = location;
+            return this;
+        }
+
+        public EventBuilder status(String status){
+            this.status = status;
+            return this;
+        }
+
+        public EventBuilder players(String[] players){
+            this.players = players;
+            return this;
+        }
+
+        public EventBuilder type(String type){
+            this.type = type;
+            return this;
+        }
+
+        public EventBuilder maxPlayers(int maxPlayers){
+            this.maxPlayers = maxPlayers;
+            return this;
+        }
+    
+        public Event build(){
+            return new Event(this);
+        }
+    }
+
     public String getName() {
         return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public LocalDateTime getScheduledDate() {
         return this.scheduledDate;
     }
 
+    public void setScheduledDate(LocalDateTime scheduledDate) {
+        this.scheduledDate = scheduledDate;
+    }
+
     public int getDuration() {
         return this.duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
     public boolean isOutdoors() {
         return this.outdoors;
     }
 
-    protected void setName(String name) {
-        this.name = name;
+    public boolean getOutdoors() {
+        return this.outdoors;
     }
 
-    protected void setScheduledDate(LocalDateTime scheduledDate) {
-        this.scheduledDate = scheduledDate;
-    }
-
-    protected void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    protected void setOutdoors(boolean outdoors) {
+    public void setOutdoors(boolean outdoors) {
         this.outdoors = outdoors;
     }
-
 
     public LocalDateTime getClosedDate() {
         return this.closedDate;
@@ -87,19 +203,11 @@ public class Event extends PanacheEntity{
         this.location = location;
     }
 
-    public String getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getWinner() {
         return this.winner;
     }
 
-    public void setWinner(String location) {
+    public void setWinner(String winner) {
         this.winner = winner;
     }
 
@@ -109,14 +217,6 @@ public class Event extends PanacheEntity{
 
     public void setPlayers(String[] players) {
         this.players = players;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public int getMaxPlayers() {

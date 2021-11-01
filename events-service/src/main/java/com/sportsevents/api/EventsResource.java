@@ -19,7 +19,7 @@ import javax.ws.rs.core.MediaType;
 import com.sportsevents.api.model.UpdatePlayersModel;
 import com.sportsevents.api.model.ClosedEventModel;
 import com.sportsevents.api.model.EventModel;
-import com.sportsevents.entity.SportsEvent;
+import com.sportsevents.entity.Event;
 import com.sportsevents.service.EventService;
 
 @Path("/events")
@@ -31,24 +31,24 @@ public class EventsResource {
     EventService eventService;
     
     @GET
-    @Path("/{type}/{eventId}")
+    @Path("/{eventId}")
     @RolesAllowed({"admin","facilitator","player"})
-    public Optional<SportsEvent> getEvent(@PathParam("type") String type, @PathParam("eventId") Long eventId){
-        return eventService.getEvent(type, eventId);
+    public Optional<Event> getEvent(@PathParam("eventId") Long eventId){
+        return eventService.getEvent(eventId);
     }
 
     @GET
-    @Path("/{type}")
+    @Path("/")
     @RolesAllowed({"admin","facilitator","player"})
-    public Response getEvents(@PathParam("type") String type){
-        return Response.ok(eventService.getEvents(type)).status(200).build();
+    public Response getEvents(){
+        return Response.ok(eventService.getEvents()).status(200).build();
     }
 
     @POST
     @RolesAllowed({"admin"})
     public Response createEvent(@Valid EventModel event){
         try{ 
-            Optional<SportsEvent> opt = eventService.createEvent(event);
+            Optional<Event> opt = eventService.createEvent(event);
             if(opt.isPresent()){
                 return Response.ok(opt.get()).status(201).build();
             }else{
@@ -99,10 +99,10 @@ public class EventsResource {
     }
 
     @DELETE
-    @Path("/{type}/{id}")
+    @Path("/{id}")
     @RolesAllowed({"admin"})
-    public Response delete(@PathParam("type") String type, @PathParam("id") Long id){
-        if(eventService.deleteEvent(type, id)){
+    public Response delete(@PathParam("id") Long id){
+        if(eventService.deleteEvent(id)){
             return Response.ok().status(204).build();
         }else{
             return Response.status(400).build();
