@@ -1,5 +1,5 @@
 import { EventService } from './../event.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./edit-events.component.css']
 })
 export class EditEventsComponent implements OnInit {
+
+  
 
   constructor(private formModule: FormsModule, private eventService: EventService) { }
 

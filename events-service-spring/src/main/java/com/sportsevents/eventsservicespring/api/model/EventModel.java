@@ -1,12 +1,17 @@
-package com.sportsevents.api.model;
-
+package com.sportsevents.eventsservicespring.api.model;
 import java.time.LocalDateTime;
 
-import javax.json.bind.annotation.JsonbDateFormat;
-import javax.json.bind.annotation.JsonbTransient;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class EventModel {
     
@@ -19,13 +24,10 @@ public class EventModel {
     @Pattern(message = "Invalid type: possible choices - chess, pingpong, swimming, tennis", regexp = "(?i)chess|tennis|swimming|pingpong")
     private String type;
 
-    @NotNull
-    @JsonbDateFormat(value = "yyyy'-'MM'-'dd'T'HH':'mm'")
+    @DateTimeFormat( iso = DateTimeFormat.ISO.DATE_TIME)
+    // @JsonDeserialize(using = LocalDateDeserializer.class)
+    // @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDateTime scheduledDate;
-
-    @NotNull
-    @JsonbDateFormat(value = "yyyy'-'MM'-'dd'T'HH':'mm'")
-    private LocalDateTime closedDate;
     
     @NotNull
     private String status;
@@ -44,7 +46,7 @@ public class EventModel {
         return this.id;
     }
 
-    @JsonbTransient
+    @JsonIgnore
     public void setId(Long id) {
         this.id = id;
     }
@@ -71,14 +73,6 @@ public class EventModel {
 
     public void setScheduledDate(LocalDateTime scheduledDate) {
         this.scheduledDate = scheduledDate;
-    }
-
-    public LocalDateTime getClosedDate() {
-        return this.closedDate;
-    }
-
-    public void setClosedDate(LocalDateTime closedDate) {
-        this.closedDate = closedDate;
     }
 
     public String getStatus() {
@@ -123,7 +117,6 @@ public class EventModel {
             " id='" + getId() + "'" +
             ", type='" + getType() + "'" +
             ", scheduledDate='" + getScheduledDate() + "'" +
-            ", closedDate='" + getClosedDate() + "'" +
             ", status='" + getStatus() + "'" +
             ", facilitator='" + getFacilitator() + "'" +
             ", location='" + getLocation() + "'" +

@@ -17,12 +17,12 @@ export class EventService {
   constructor(private http: HttpClient, private keycloakService: KeycloakService){}
 
   getEvents(): Observable<Event[]>{
-      const uri = `${env.api_host}/events/chess`;
+      const uri = `${env.api_host}/events`;
       return this.http.get<Event[]>(uri);
   }
 
   getEvent(data): Observable<Event>{
-    const uri = `${env.api_host}/events/${data.type.toLowerCase()}/${data.id}`;
+    const uri = `${env.api_host}/events/${data.id}`;
     return this.http.get<Event>(uri);
   }
 
@@ -35,11 +35,10 @@ export class EventService {
       })).subscribe();
   }
 
-  joinEvent(eventId, type): Observable<void>{
+  joinEvent(eventId): Observable<void>{
     const uri = `${env.api_host}/events/addPlayer`;
     let player = new AddPlayer();
     player.eventId = eventId;
-    player.type = type.toLowerCase();
     player.playerName = this.keycloakService.getUsername();
     return this.http.patch<void>(uri, player).pipe(
       catchError(err=>{
@@ -53,7 +52,6 @@ export class EventService {
     let closedEvent = new CloseEvent();
     closedEvent.eventId = event.id;
     closedEvent.closedBy = this.keycloakService.getUsername();
-    closedEvent.type = event.type.toLowerCase();
     closedEvent.winner = event.winner;
     closedEvent.closedDate = this.getNowDate();
     return this.http.post<void>(uri, closedEvent).pipe(
@@ -64,7 +62,7 @@ export class EventService {
   }
 
   deleteEvent(event): Observable<void>{
-    const uri = `${env.api_host}/events/${event.type.toLowerCase()}/${event.id}`;
+    const uri = `${env.api_host}/events/${event.id}`;
     console.log('Deleting event with id ' + event.id);
     return this.http.delete<void>(uri).pipe(
       catchError(err=>{
@@ -156,7 +154,8 @@ export class EventService {
         date[i] = '0'+date[i];
       }
     }
-    return `${date[0]}-${date[1]}-${date[2]}T${date[3]}:${date[4]}:${date[5]}`;
+    return `${date[0]}-${date[1]}-${date[2]}T${date[3]}:${date[4]}`;
+    // return `${date[0]}-${date[1]}-${date[2]}T${date[3]}:${date[4]}:${date[5]}`;
   }
 
   private formatDate(dateString): string {
@@ -172,16 +171,16 @@ export class EventService {
     let dd = today.getDay().toString();
     let HH = today.getHours().toString();
     let mm = today.getMinutes().toString();
-    let ss = today.getSeconds().toString();
+    // let ss = today.getSeconds().toString();
     if(dd.length < 2){
       dd='0'+dd;
     }
     if(MM.length < 2){
       MM='0'+MM;
     }
-    if(ss.length < 2){
-      ss='0'+ss;
-    }
+    // if(ss.length < 2){
+    //   ss='0'+ss;
+    // }
     if(HH.length < 2){
       HH='0'+HH;
     }
@@ -189,6 +188,7 @@ export class EventService {
       mm='0'+mm;
     }
 
-    return `${yyyy}-${MM}-${dd}T${HH}:${mm}:${ss}`;
+    return `${yyyy}-${MM}-${dd}T${HH}:${mm}`;
+    // return `${yyyy}-${MM}-${dd}T${HH}:${mm}:${ss}`;
   }
 }

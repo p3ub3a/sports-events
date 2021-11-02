@@ -64,8 +64,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.showDetailsSubscription = eventRes.subscribe(data => data);
   }
 
-  joinEvent(eventId, type): void{
-    this.joinEventSubscription = this.eventService.joinEvent(eventId, type).subscribe();
+  joinEvent(eventId): void{
+    this.joinEventSubscription = this.eventService.joinEvent(eventId).subscribe();
   }
 
   deleteEvent(event): void{

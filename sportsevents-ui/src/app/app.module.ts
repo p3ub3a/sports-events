@@ -1,4 +1,4 @@
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthGuard } from './auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,7 +16,15 @@ import { EditUsersComponent } from './edit-users/edit-users.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { HomeComponent } from './home/home.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxMatDatetimePickerModule, NgxMatNativeDateModule, NgxMatTimepickerModule} from '@angular-material-components/datetime-picker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { NgxMatMomentModule } from '@angular-material-components/moment-adapter';
+import { MatRadioModule} from '@angular/material/radio';
+import { MatCheckboxModule} from '@angular/material/checkbox';
+import { MatSelectModule,} from '@angular/material/select';
 
 
 @NgModule({
@@ -36,7 +44,18 @@ import { HomeComponent } from './home/home.component';
     KeycloakAngularModule,
     // RouterModule.forRoot(appRoutes),
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    NgxMatMomentModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatCheckboxModule
   ],
   providers: [
     {

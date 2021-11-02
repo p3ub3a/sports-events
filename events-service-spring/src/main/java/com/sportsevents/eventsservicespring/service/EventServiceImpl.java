@@ -1,40 +1,47 @@
-package com.sportsevents.service;
+package com.sportsevents.eventsservicespring.service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 
-import com.sportsevents.api.model.UpdatePlayersModel;
-import com.sportsevents.api.model.ClosedEventModel;
-import com.sportsevents.api.model.EventModel;
-import com.sportsevents.entity.Event;
-import com.sportsevents.entity.EventStatus;
+import com.sportsevents.eventsservicespring.api.model.ClosedEventModel;
+import com.sportsevents.eventsservicespring.api.model.EventModel;
+import com.sportsevents.eventsservicespring.api.model.UpdatePlayersModel;
+import com.sportsevents.eventsservicespring.entity.Event;
+import com.sportsevents.eventsservicespring.entity.EventStatus;
+import com.sportsevents.eventsservicespring.entity.EventType;
+import com.sportsevents.eventsservicespring.entity.EventsRepo;
+import com.sportsevents.eventsservicespring.utils.EventsUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@ApplicationScoped
+@Service
 public class EventServiceImpl implements EventService {
 
     private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
+    @Autowired
+    private EventsRepo eventsRepo;
+
     @Override
     @Transactional
     public Optional<Event> createEvent(EventModel eventModel) throws IllegalArgumentException{
-        Optional<Event> eventOpt = EventFactory.getSportsEvent(eventModel);
-        eventOpt.ifPresent(this::saveEvent);
-        return eventOpt;
+        Optional<Event> sportsEventOpt = EventsUtils.getSportsEvent(eventModel);
+        sportsEventOpt.ifPresent(this::saveEvent);
+        return sportsEventOpt;
     }
 
     private void saveEvent(Event sportsEvent) throws IllegalArgumentException{
         Event event = (Event) sportsEvent;
 
         if(event.getScheduledDate().isAfter(LocalDateTime.now())){
-            event.persist();
+            eventsRepo.save(event);
             logger.info("Persisted event with id {}, event description: {}", event.getId(), event.toString());
         }else{
             logger.info("Unable to persist event with id {}, past event date: {}", event.getId(), event.getScheduledDate().toString());
@@ -44,39 +51,39 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Optional<Event> getEvent(Long id) {
-        return Optional.ofNullable(Event.findById(id));
+    public Optional<Event> getEvent(String type, Long id) {
+        return Optional.ofNullable((Event) eventsRepo.findById(id).get());
     }
 
     @Override
-    public List<Event> getEvents() {
-        return Event.findAll().list().stream().map(event -> (Event) event)
-                .collect(Collectors.toList());
+    public List<Event> getEvents(String type) {
+        Optional<EventType> optType = EventsUtils.getType(type);
+        if(optType.isPresent()){
+            return eventsRepo.findByType(optType.get().toString()).stream().map(event -> (Event) event)
+                        .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     @Override
     @Transactional
-    public boolean deleteEvent(Long id) {
-        try{
-            logger.info("Deleting event with id {} ", id);
-            return Event.deleteById(id);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return false;
+    public void deleteEvent(Long id) {
+        eventsRepo.deleteById(id); 
     }
 
     @Override
     @Transactional
     public boolean closeEvent(ClosedEventModel closedEventModel) {
-        Optional<Event> chessEventOpt = Optional.ofNullable(Event.findById(closedEventModel.getEventId()));
-        if (chessEventOpt.isPresent()) {
-            if(chessEventOpt.get().getStatus().equals(EventStatus.CLOSED.toString())){
+        Optional<Event> optEvent = eventsRepo.findById(closedEventModel.getEventId());
+
+        if (optEvent.isPresent()) {
+            Event event = optEvent.get();
+            if(event.getStatus().equals(EventStatus.CLOSED.toString())){
                 logger.info("Event with id {} is already closed, update not required", closedEventModel.getEventId());
                 return false;
             }
-            Event.update("winner = ?1, closedBy = ?2, status = ?3, closedDate = ?4 where id = ?5", closedEventModel.getWinner(),
-                closedEventModel.getClosedBy(),EventStatus.CLOSED.toString(),closedEventModel.getClosedDate(),closedEventModel.getEventId());
+            eventsRepo.closeEvent(closedEventModel.getWinner(),closedEventModel.getClosedBy(),EventStatus.CLOSED.toString(),
+                            closedEventModel.getClosedDate(),closedEventModel.getEventId());
             logger.info("Closed event with id {} ", closedEventModel.getEventId());
             return true;
         } else {
@@ -87,10 +94,11 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public boolean addPlayer(UpdatePlayersModel updatePlayersModel) {
-        Optional<Event> optionalChessEvent = Optional.ofNullable(Event.findById(updatePlayersModel.getEventId()));
-        if (optionalChessEvent.isPresent()) {
-            Event chessEvent = optionalChessEvent.get();
-            if(isMaxPlayersReached(chessEvent, EventFactory.CHESS_EVENT_MAX_PLAYERS)){
+        Optional<Event> optEvent = eventsRepo.findById(updatePlayersModel.getEventId());
+
+        if (optEvent.isPresent()) {
+            Event event = optEvent.get();
+            if(isMaxPlayersReached(event, EventsUtils.getMaxPlayers(event.getType()))){
                 logger.info("Max players reached for event id {}, can't add another player", updatePlayersModel.getEventId());
                 return false;
             } 
@@ -98,7 +106,7 @@ public class EventServiceImpl implements EventService {
             //     logger.info("Player {} already exists for event id {}", updatePlayersModel.getPlayerName(),updatePlayersModel.getEventId());
             //     return false;
             // }
-            Event.update("players = ?1 where id = ?2", addPlayer(chessEvent.getPlayers(), updatePlayersModel.getPlayerName()), updatePlayersModel.getEventId());
+            eventsRepo.updatePlayers(addPlayer(event.getPlayers(), updatePlayersModel.getPlayerName()), updatePlayersModel.getEventId());
             logger.info("Added player {}, event id: {} ", updatePlayersModel.getPlayerName(),updatePlayersModel.getEventId());
             return true;
         } else {
@@ -109,10 +117,11 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public boolean removePlayer(UpdatePlayersModel updatePlayersModel) {
-        Optional<Event> optionalChessEvent = Optional.ofNullable(Event.findById(updatePlayersModel.getEventId()));
-        if (optionalChessEvent.isPresent()) {
-            Event chessEvent = optionalChessEvent.get();
-            Event.update("players = ?1 where id = ?2", removePlayer(chessEvent.getPlayers(), updatePlayersModel.getPlayerName()), updatePlayersModel.getEventId());
+        Optional<Event> optEvent = eventsRepo.findById(updatePlayersModel.getEventId());
+
+        if (optEvent.isPresent()) {
+            Event event = optEvent.get();
+            eventsRepo.updatePlayers(removePlayer(event.getPlayers(), updatePlayersModel.getPlayerName()), updatePlayersModel.getEventId());
             logger.info("Removed player {} from event with id {}", updatePlayersModel.getPlayerName(),updatePlayersModel.getEventId());
             return true;
         } else {
@@ -138,8 +147,8 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private boolean isMaxPlayersReached(Event event, long max) {
-        return event.getMaxPlayers() < max;
+    private boolean isMaxPlayersReached(Event event, Optional<Integer> maxOpt) {
+        return event.getMaxPlayers() <= maxOpt.get();
     }
 
     private String[] removePlayer(String[] players, String playerName) {

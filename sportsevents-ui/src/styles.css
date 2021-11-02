@@ -98,6 +98,22 @@ a {
   color: white;
 }
 
+.field {
+  margin-left: 7px;
+  width:20vw;
+}
+
+.inputField {
+  font-size: 16px;
+  border: 1px solid #466289;
+  height: 25px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background:cadetblue;
+  color: white;
+}
+
 div.settings {
   display:grid;
   grid-template-columns: max-content max-content;
@@ -106,7 +122,6 @@ div.settings {
 div.settings .label       { text-align:right; }
 
 select {
-  /* margin: 10px; */
   width: 150px;
   padding: 5px 35px 5px 5px;
   font-size: 16px;
@@ -115,5 +130,9 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background: 96% / 15% no-repeat cadetblue;
+  background: no-repeat cadetblue;
+  color: white;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

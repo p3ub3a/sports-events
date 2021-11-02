@@ -23,6 +23,6 @@
   <h4>Participating players: <span>{{selectedEvent.players}}</span><span>[{{selectedEvent.players ? selectedEvent.players.length : 0}}/{{selectedEvent.maxPlayers}}]</span></h4>
 
   <br/>
-  <button class="button participate" *ngIf="roles.includes('player')" (click)="joinEvent(selectedEvent.id, selectedEvent.type);">Participate</button>
+  <button class="button participate" *ngIf="roles.includes('player')" (click)="joinEvent(selectedEvent.id);">Participate</button>
   <button class="button participate" *ngIf="roles.includes('admin')" (click)="deleteEvent(selectedEvent)">Delete</button>
 </div>
