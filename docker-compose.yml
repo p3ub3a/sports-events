@@ -52,7 +52,7 @@ services:
       - 8081:8080
 
   keycloak-db:
-    image: postgres:alpine
+    image: postgres:13
     environment:
       POSTGRES_PASSWORD: keycloak
       POSTGRES_USER: keycloak
