@@ -1,14 +1,14 @@
-package com.sportsevents.eventsservicespring.utils;
+package com.sportsevents.utils;
 
 import java.util.Optional;
 
-import com.sportsevents.eventsservicespring.api.model.EventModel;
-import com.sportsevents.eventsservicespring.entity.Event;
-import com.sportsevents.eventsservicespring.entity.EventStatus;
-import com.sportsevents.eventsservicespring.entity.EventType;
-import com.sportsevents.eventsservicespring.entity.Event.EventBuilder;
+import com.sportsevents.api.model.EventModel;
+import com.sportsevents.entity.Event;
+import com.sportsevents.entity.EventStatus;
+import com.sportsevents.entity.EventType;
+import com.sportsevents.entity.Event.EventBuilder;
 
-public class EventsUtils {
+public class EventUtils {
     public static final String CHESS_EVENT_NAME = "Chess match";
     public static final String PINGPONG_EVENT_NAME = "Pingpong game";
     public static final String SWIMMING_EVENT_NAME = "Swimming competition";
@@ -65,21 +65,6 @@ public class EventsUtils {
                 .maxPlayers(maxPlayers)
                 .build());
     }
-    
-    public static Optional<EventType> getType(String type){
-        switch(type){
-            case "chess":
-                return Optional.of(EventType.CHESS);
-            case "pingpong":
-                return Optional.of(EventType.PINGPONG);
-            case "swimming":
-                return Optional.of(EventType.SWIMMING);
-            case "tennis":
-                return Optional.of(EventType.TENNIS);
-            default:
-                return Optional.empty();
-        }
-    }
 
     public static Optional<Integer> getMaxPlayers(String type){
         switch(type.toLowerCase()){
@@ -96,3 +81,4 @@ public class EventsUtils {
         }
     }
 }
+

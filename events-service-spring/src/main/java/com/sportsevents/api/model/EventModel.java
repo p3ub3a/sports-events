@@ -1,4 +1,4 @@
-package com.sportsevents.eventsservicespring.api.model;
+package com.sportsevents.api.model;
 import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotEmpty;
@@ -6,30 +6,25 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 import org.springframework.format.annotation.DateTimeFormat;
-
 public class EventModel {
     
     private Long id;
 
-    @NotEmpty
     private String name;
 
     @NotNull
     @Pattern(message = "Invalid type: possible choices - chess, pingpong, swimming, tennis", regexp = "(?i)chess|tennis|swimming|pingpong")
     private String type;
 
-    @DateTimeFormat( iso = DateTimeFormat.ISO.DATE_TIME)
-    // @JsonDeserialize(using = LocalDateDeserializer.class)
-    // @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDateTime scheduledDate;
-    
     @NotNull
+    @DateTimeFormat( iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime scheduledDate;
+
+    @DateTimeFormat( iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime closedDate;
+    
     private String status;
 
     @NotNull
@@ -75,6 +70,14 @@ public class EventModel {
         this.scheduledDate = scheduledDate;
     }
 
+    public LocalDateTime getClosedDate() {
+        return this.closedDate;
+    }
+
+    public void setClosedDate(LocalDateTime closedDate) {
+        this.closedDate = closedDate;
+    }
+
     public String getStatus() {
         return this.status;
     }
@@ -117,6 +120,7 @@ public class EventModel {
             " id='" + getId() + "'" +
             ", type='" + getType() + "'" +
             ", scheduledDate='" + getScheduledDate() + "'" +
+            ", closedDate='" + getClosedDate() + "'" +
             ", status='" + getStatus() + "'" +
             ", facilitator='" + getFacilitator() + "'" +
             ", location='" + getLocation() + "'" +

@@ -1,15 +1,15 @@
-package com.sportsevents.eventsservicespring.api;
+package com.sportsevents.api;
 import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
-import com.sportsevents.eventsservicespring.api.model.ClosedEventModel;
-import com.sportsevents.eventsservicespring.api.model.EventModel;
-import com.sportsevents.eventsservicespring.api.model.UpdatePlayersModel;
-import com.sportsevents.eventsservicespring.entity.Event;
-import com.sportsevents.eventsservicespring.service.EventService;
+import com.sportsevents.api.model.ClosedEventModel;
+import com.sportsevents.api.model.EventModel;
+import com.sportsevents.api.model.UpdatePlayersModel;
+import com.sportsevents.entity.Event;
+import com.sportsevents.service.EventService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,16 +27,16 @@ public class EventsController {
     @Autowired
     EventService eventService;
     
-    @GetMapping("/{type}/{eventId}")
+    @GetMapping("/{eventId}")
     // @RolesAllowed({"admin","facilitator","player"})
-    public Optional<Event> getEvent(@PathVariable("type") String type, @PathVariable("eventId") Long eventId){
-        return eventService.getEvent(type, eventId);
+    public Optional<Event> getEvent(@PathVariable("eventId") Long eventId){
+        return eventService.getEvent(eventId);
     }
 
-    @GetMapping("/{type}")
+    @GetMapping()
     // @RolesAllowed({"admin","facilitator","player"})
-    public ResponseEntity<List<Event>> getEvents(@PathVariable("type") String type){
-        return ResponseEntity.ok(eventService.getEvents(type));
+    public ResponseEntity<List<Event>> getEvents(){
+        return ResponseEntity.ok(eventService.getEvents());
     }
 
     @PostMapping
@@ -90,9 +90,9 @@ public class EventsController {
         
     }
 
-    @DeleteMapping("/{type}/{id}")
+    @DeleteMapping("/{id}")
     // @RolesAllowed({"admin"})
-    public ResponseEntity delete(@PathVariable("type") String type, @PathVariable("id") Long id){
+    public ResponseEntity delete(@PathVariable("id") Long id){
         eventService.deleteEvent(id);
         return ResponseEntity.status(204).build();
     }

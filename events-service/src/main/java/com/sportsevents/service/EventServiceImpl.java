@@ -56,14 +56,13 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public boolean deleteEvent(Long id) {
+    public void deleteEvent(Long id) {
         try{
             logger.info("Deleting event with id {} ", id);
-            return Event.deleteById(id);
+            Event.deleteById(id);
         }catch(Exception e){
             e.printStackTrace();
         }
-        return false;
     }
 
     @Override

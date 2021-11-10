@@ -102,10 +102,6 @@ public class EventsResource {
     @Path("/{id}")
     @RolesAllowed({"admin"})
     public Response delete(@PathParam("id") Long id){
-        if(eventService.deleteEvent(id)){
-            return Response.ok().status(204).build();
-        }else{
-            return Response.status(400).build();
-        }
+        return Response.ok().status(204).build();
     }
 }

@@ -1,4 +1,4 @@
-package com.sportsevents.eventsservicespring.entity;
+package com.sportsevents.entity;
 
 import java.time.LocalDateTime;
 
@@ -6,15 +6,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "event")
-public class Event{
-
+public class Event {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(generator = "event_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(
+      name = "event_generator", 
+      sequenceName = "event_id_seq"
+    )
+    private long id;
 
     private String name;
     private String type;
@@ -44,115 +48,6 @@ public class Event{
         this.setStatus(builder.status);
         this.setType(builder.type);
         this.setMaxPlayers(builder.maxPlayers);
-    }
-
-    public Long getId(){
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public LocalDateTime getScheduledDate() {
-        return this.scheduledDate;
-    }
-
-    public int getDuration() {
-        return this.duration;
-    }
-
-    public boolean isOutdoors() {
-        return this.outdoors;
-    }
-
-    protected void setName(String name) {
-        this.name = name;
-    }
-
-    protected void setScheduledDate(LocalDateTime scheduledDate) {
-        this.scheduledDate = scheduledDate;
-    }
-
-    protected void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    protected void setOutdoors(boolean outdoors) {
-        this.outdoors = outdoors;
-    }
-
-
-    public LocalDateTime getClosedDate() {
-        return this.closedDate;
-    }
-
-    public void setClosedDate(LocalDateTime closedDate) {
-        this.closedDate = closedDate;
-    }
-
-    public String getFacilitator() {
-        return this.facilitator;
-    }
-
-    public void setFacilitator(String facilitator) {
-        this.facilitator = facilitator;
-    }
-
-    public String getClosedBy() {
-        return this.closedBy;
-    }
-
-    public void setClosedBy(String closedBy) {
-        this.closedBy = closedBy;
-    }
-
-    public String getLocation() {
-        return this.location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getWinner() {
-        return this.winner;
-    }
-
-    public void setWinner(String location) {
-        this.winner = winner;
-    }
-
-    public String[] getPlayers() {
-        return this.players;
-    }
-
-    public void setPlayers(String[] players) {
-        this.players = players;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public int getMaxPlayers() {
-        return this.maxPlayers;
-    }
-
-    public void setMaxPlayers(int maxPlayers) {
-        this.maxPlayers = maxPlayers;
     }
 
     public static class EventBuilder {
@@ -232,6 +127,122 @@ public class Event{
         public Event build(){
             return new Event(this);
         }
+    }
+
+    public long getId() {
+        return this.id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getScheduledDate() {
+        return this.scheduledDate;
+    }
+
+    public void setScheduledDate(LocalDateTime scheduledDate) {
+        this.scheduledDate = scheduledDate;
+    }
+
+    public int getDuration() {
+        return this.duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public boolean isOutdoors() {
+        return this.outdoors;
+    }
+
+    public boolean getOutdoors() {
+        return this.outdoors;
+    }
+
+    public void setOutdoors(boolean outdoors) {
+        this.outdoors = outdoors;
+    }
+
+    public LocalDateTime getClosedDate() {
+        return this.closedDate;
+    }
+
+    public void setClosedDate(LocalDateTime closedDate) {
+        this.closedDate = closedDate;
+    }
+
+    public String getFacilitator() {
+        return this.facilitator;
+    }
+
+    public void setFacilitator(String facilitator) {
+        this.facilitator = facilitator;
+    }
+
+    public String getClosedBy() {
+        return this.closedBy;
+    }
+
+    public void setClosedBy(String closedBy) {
+        this.closedBy = closedBy;
+    }
+
+    public String getLocation() {
+        return this.location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getWinner() {
+        return this.winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public String[] getPlayers() {
+        return this.players;
+    }
+
+    public void setPlayers(String[] players) {
+        this.players = players;
+    }
+
+    public int getMaxPlayers() {
+        return this.maxPlayers;
+    }
+
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.sportsevents.eventsservicespring;
+package com.sportsevents;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

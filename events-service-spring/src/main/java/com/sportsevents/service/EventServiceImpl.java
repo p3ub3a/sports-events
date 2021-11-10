@@ -1,20 +1,18 @@
-package com.sportsevents.eventsservicespring.service;
+package com.sportsevents.service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 
-import com.sportsevents.eventsservicespring.api.model.ClosedEventModel;
-import com.sportsevents.eventsservicespring.api.model.EventModel;
-import com.sportsevents.eventsservicespring.api.model.UpdatePlayersModel;
-import com.sportsevents.eventsservicespring.entity.Event;
-import com.sportsevents.eventsservicespring.entity.EventStatus;
-import com.sportsevents.eventsservicespring.entity.EventType;
-import com.sportsevents.eventsservicespring.entity.EventsRepo;
-import com.sportsevents.eventsservicespring.utils.EventsUtils;
+import com.sportsevents.api.model.UpdatePlayersModel;
+import com.sportsevents.api.model.ClosedEventModel;
+import com.sportsevents.api.model.EventModel;
+import com.sportsevents.entity.Event;
+import com.sportsevents.entity.EventStatus;
+import com.sportsevents.entity.EventsRepo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +26,13 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private EventsRepo eventsRepo;
-
+    
     @Override
     @Transactional
     public Optional<Event> createEvent(EventModel eventModel) throws IllegalArgumentException{
-        Optional<Event> sportsEventOpt = EventsUtils.getSportsEvent(eventModel);
-        sportsEventOpt.ifPresent(this::saveEvent);
-        return sportsEventOpt;
+        Optional<Event> eventOpt = EventFactory.getSportsEvent(eventModel);
+        eventOpt.ifPresent(this::saveEvent);
+        return eventOpt;
     }
 
     private void saveEvent(Event sportsEvent) throws IllegalArgumentException{
@@ -51,24 +49,27 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Optional<Event> getEvent(String type, Long id) {
+    public Optional<Event> getEvent(Long id) {
         return Optional.ofNullable((Event) eventsRepo.findById(id).get());
     }
 
     @Override
-    public List<Event> getEvents(String type) {
-        Optional<EventType> optType = EventsUtils.getType(type);
-        if(optType.isPresent()){
-            return eventsRepo.findByType(optType.get().toString()).stream().map(event -> (Event) event)
-                        .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+    public List<Event> getEvents() {
+        Iterable<Event> iterable = eventsRepo.findAll();
+        List<Event> events = new ArrayList<>();
+        iterable.forEach(events::add);
+        return events;
     }
 
     @Override
     @Transactional
     public void deleteEvent(Long id) {
-        eventsRepo.deleteById(id); 
+        try{
+            logger.info("Deleting event with id {} ", id);
+            eventsRepo.deleteById(id); 
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -98,7 +99,7 @@ public class EventServiceImpl implements EventService {
 
         if (optEvent.isPresent()) {
             Event event = optEvent.get();
-            if(isMaxPlayersReached(event, EventsUtils.getMaxPlayers(event.getType()))){
+            if(isMaxPlayersReached(event, EventFactory.getMaxPlayers(event.getType()).get())){
                 logger.info("Max players reached for event id {}, can't add another player", updatePlayersModel.getEventId());
                 return false;
             } 
@@ -147,8 +148,8 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private boolean isMaxPlayersReached(Event event, Optional<Integer> maxOpt) {
-        return event.getMaxPlayers() <= maxOpt.get();
+    private boolean isMaxPlayersReached(Event event, long max) {
+        return event.getMaxPlayers() < max;
     }
 
     private String[] removePlayer(String[] players, String playerName) {

@@ -86,4 +86,19 @@ public class EventFactory {
         
     }
 
+    public static Optional<Integer> getMaxPlayers(String type){
+        switch(type.toLowerCase()){
+            case "chess":
+                return Optional.of(CHESS_EVENT_MAX_PLAYERS);
+            case "pingpong":
+                return Optional.of(PINGPONG_EVENT_MAX_PLAYERS);
+            case "swimming":
+                return Optional.of(SWIMMING_EVENT_MAX_PLAYERS);
+            case "tennis":
+                return Optional.of(TENNIS_EVENT_MAX_PLAYERS);
+            default:
+                return Optional.empty();
+        }
+    }
+
 }

@@ -1,5 +1,4 @@
-package com.sportsevents.eventsservicespring.entity;
-
+package com.sportsevents.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,3 +25,4 @@ public interface EventsRepo extends CrudRepository<Event, Long>{
     int updatePlayers(@Param("players") String[] players,
         @Param("id") Long id);
 }
+
