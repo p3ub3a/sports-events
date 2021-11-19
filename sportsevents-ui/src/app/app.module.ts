@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { HomeNavComponent } from './home-nav/home-nav.component';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { initializer } from './initializer.service';
-import { environment as env} from '../environments/environment';
+import  * as env from '../environments/environment';
 import { RouterModule, Routes } from '@angular/router';
 import { PastEventsComponent } from './past-events/past-events.component';
 import { EditEventsComponent } from './edit-events/edit-events.component';
@@ -73,9 +73,9 @@ function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
     keycloak.init({
       config: {
-        url: env.keycloak.issuer,
-        realm: env.keycloak.realm,
-        clientId: env.keycloak.clientId,
+        url: env.current_environment.keycloak.issuer,
+        realm: env.current_environment.keycloak.realm,
+        clientId: env.current_environment.keycloak.clientId,
       },
       loadUserProfileAtStartUp: true,
       initOptions: {

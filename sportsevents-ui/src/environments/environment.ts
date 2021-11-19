@@ -2,7 +2,7 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+export const quarkus_environment = {
   production: false,
   keycloak: {
     issuer: 'http://localhost:8081/auth/',
@@ -11,6 +11,18 @@ export const environment = {
   },
   api_host: 'http://localhost:8082'
 };
+
+export const spring_environment = {
+  production: false,
+  keycloak: {
+    issuer: 'http://localhost:8081/auth/',
+    realm: 'sportsevents-realm',
+    clientId: 'sportsevents-portal'
+  },
+  api_host: 'http://localhost:8089'
+};
+
+export const current_environment = spring_environment;
 
 /*
  * For easier debugging in development mode, you can import the following file

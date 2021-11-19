@@ -3,7 +3,7 @@ import { AddPlayer } from './_model/add-player.model';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { Event, CloseEvent } from './_model';
-import { environment as env } from '../environments/environment';
+import * as env  from '../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { catchError } from 'rxjs/operators';
@@ -13,21 +13,22 @@ import { catchError } from 'rxjs/operators';
 })
 export class EventService {
   private datePipe: DatePipe=new DatePipe("en-us");
+  private environment = env.current_environment;
 
   constructor(private http: HttpClient, private keycloakService: KeycloakService){}
 
   getEvents(): Observable<Event[]>{
-      const uri = `${env.api_host}/events`;
+      const uri = `${this.environment.api_host}/events`;
       return this.http.get<Event[]>(uri);
   }
 
   getEvent(data): Observable<Event>{
-    const uri = `${env.api_host}/events/${data.id}`;
+    const uri = `${this.environment.api_host}/events/${data.id}`;
     return this.http.get<Event>(uri);
   }
 
   createEvent(data): void{
-    const uri = `${env.api_host}/events`;
+    const uri = `${this.environment.api_host}/events`;
     this.http.post<void>(uri, data).pipe(
       catchError(err=>{
         console.log(err);
@@ -36,7 +37,7 @@ export class EventService {
   }
 
   joinEvent(eventId): Observable<void>{
-    const uri = `${env.api_host}/events/addPlayer`;
+    const uri = `${this.environment.api_host}/events/addPlayer`;
     let player = new AddPlayer();
     player.eventId = eventId;
     player.playerName = this.keycloakService.getUsername();
@@ -48,7 +49,7 @@ export class EventService {
   }
 
   closeEvent(event): Observable<void>{
-    const uri = `${env.api_host}/events/closeEvent`;
+    const uri = `${this.environment.api_host}/events/closeEvent`;
     let closedEvent = new CloseEvent();
     closedEvent.eventId = event.id;
     closedEvent.closedBy = this.keycloakService.getUsername();
@@ -62,7 +63,7 @@ export class EventService {
   }
 
   deleteEvent(event): Observable<void>{
-    const uri = `${env.api_host}/events/${event.id}`;
+    const uri = `${this.environment.api_host}/events/${event.id}`;
     console.log('Deleting event with id ' + event.id);
     return this.http.delete<void>(uri).pipe(
       catchError(err=>{
