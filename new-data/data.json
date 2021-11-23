@@ -1,0 +1,56 @@
+[
+  {
+    "Event": {
+      "id": 1,
+      "name": "test_external11",
+      "type": "CHESS",
+      "status": "CREATED",
+      "scheduledDate": "2021-12-20T15:30:00",
+      "duration": 30,
+      "outdoors": false,
+      "closedDate": null,
+      "facilitator": "facilitator",
+      "closedBy": null,
+      "location": "Iasi",
+      "winner": null,
+      "players": [ "gica1", "gica2" ],
+      "maxPlayers": 2
+    }
+  },
+  {
+    "Event": {
+      "id": 2,
+      "name": "test_external2",
+      "type": "CHESS",
+      "status": "CREATED",
+      "scheduledDate": "2021-12-20T16:00:00",
+      "duration": 30,
+      "outdoors": false,
+      "closedDate": null,
+      "facilitator": "facilitator",
+      "closedBy": null,
+      "location": "Iasi",
+      "winner": null,
+      "players": [ "gica3", "gica43" ],
+      "maxPlayers": 2
+    }
+  },
+  {
+    "Event": {
+      "id": 12345,
+      "name": "test_external3",
+      "type": "CHESS",
+      "status": "CREATED",
+      "scheduledDate": "2021-12-20T16:01:01",
+      "duration": 30,
+      "outdoors": false,
+      "closedDate": null,
+      "facilitator": "facilitator",
+      "closedBy": null,
+      "location": "Iasi",
+      "winner": null,
+      "players": [ "gica5", "gica6" ],
+      "maxPlayers": 2
+    }
+  }
+]

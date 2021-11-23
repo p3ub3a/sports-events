@@ -18,8 +18,9 @@ public class Event extends PanacheEntityBase{
     @GeneratedValue(generator = "event_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(
       name = "event_generator", 
-      sequenceName = "event_id_seq"
-    )
+      sequenceName = "event_id_seq",
+      allocationSize = 1,
+      initialValue = 1)
     private long id;
 
     private String name;
@@ -39,6 +40,7 @@ public class Event extends PanacheEntityBase{
     public Event(){}
 
     private Event(EventBuilder builder){
+        if(builder.id != null) this.setId(builder.id);
         this.setName(builder.name);
         this.setScheduledDate(builder.scheduledDate);
         this.setDuration(builder.duration);
@@ -50,9 +52,12 @@ public class Event extends PanacheEntityBase{
         this.setStatus(builder.status);
         this.setType(builder.type);
         this.setMaxPlayers(builder.maxPlayers);
+        this.setPlayers(builder.players);
+        this.setWinner(builder.winner);
     }
 
     public static class EventBuilder {
+        private Long id;
         private String name;
         private LocalDateTime scheduledDate;
         private int duration;
@@ -65,7 +70,13 @@ public class Event extends PanacheEntityBase{
         private String type;
         private String[] players;
         private int maxPlayers;
+        private String winner;
     
+        public EventBuilder id(Long id){
+            this.id = id;
+            return this;
+        }
+
         public EventBuilder name(String name){
             this.name = name;
             return this;
@@ -123,6 +134,11 @@ public class Event extends PanacheEntityBase{
 
         public EventBuilder maxPlayers(int maxPlayers){
             this.maxPlayers = maxPlayers;
+            return this;
+        }
+
+        public EventBuilder winner(String winner){
+            this.winner = winner;
             return this;
         }
     
