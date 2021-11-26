@@ -7,10 +7,18 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
   - job_name: 'quarkus-events'
+    honor_labels: true
     metrics_path: '/q/metrics'
     static_configs:
-      - targets: ['gateway.docker.internal:8082']
+      - targets: 
+        - 'gateway.docker.internal:8082'
+        labels:
+          application: 'quarkus-app'
   - job_name: 'springboot-events'
+    honor_labels: true
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['gateway.docker.internal:8089']
+      - targets: 
+        - 'gateway.docker.internal:8089'
+        labels:
+          application: 'springboot-app'
