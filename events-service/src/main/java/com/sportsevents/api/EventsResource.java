@@ -22,6 +22,8 @@ import com.sportsevents.api.model.EventModel;
 import com.sportsevents.entity.Event;
 import com.sportsevents.service.EventService;
 
+import io.micrometer.core.annotation.Timed;
+
 @Path("/events")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,6 +35,7 @@ public class EventsResource {
     @GET
     @Path("/{eventId}")
     @RolesAllowed({"admin","facilitator","player"})
+    @Timed(value="get_event.request", histogram=true)
     public Optional<Event> getEvent(@PathParam("eventId") Long eventId){
         return eventService.getEvent(eventId);
     }
@@ -40,12 +43,14 @@ public class EventsResource {
     @GET
     @Path("/")
     @RolesAllowed({"admin","facilitator","player"})
+    @Timed(value="get_events.request", histogram=true)
     public Response getEvents(){
         return Response.ok(eventService.getEvents()).status(200).build();
     }
 
     @POST
     @RolesAllowed({"admin"})
+    @Timed(value="create_event.request", histogram=true)
     public Response createEvent(@Valid EventModel event){
         try{ 
             Optional<Event> opt = eventService.createEvent(event);
@@ -62,6 +67,7 @@ public class EventsResource {
     @PATCH
     @RolesAllowed({"player"})
     @Path("/addPlayer")
+    @Timed(value="add_player.request", histogram=true)
     public Response addPlayer(@Valid UpdatePlayersModel updatePlayersModel){
 
         if(eventService.addPlayer(updatePlayersModel)){
@@ -75,6 +81,7 @@ public class EventsResource {
     @PATCH
     @RolesAllowed({"player"})
     @Path("/removePlayer")
+    @Timed(value="remove_player.request", histogram=true)
     public Response removePlayer(@Valid UpdatePlayersModel updatePlayersModel){
 
         if(eventService.removePlayer(updatePlayersModel)){
@@ -88,6 +95,7 @@ public class EventsResource {
     @POST
     @RolesAllowed({"admin", "facilitator"})
     @Path("/closeEvent")
+    @Timed(value="close_event.request", histogram=true)
     public Response closeEvent(@Valid ClosedEventModel closedEventModel){
 
         if(eventService.closeEvent(closedEventModel)){
@@ -101,6 +109,7 @@ public class EventsResource {
     @DELETE
     @Path("/{id}")
     @RolesAllowed({"admin"})
+    @Timed(value="delete_event.request", histogram=true)
     public Response delete(@PathParam("id") Long id){
         return Response.ok().status(204).build();
     }

@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import io.micrometer.core.annotation.Timed;
+
 @Component
 public class EventsFileReader {
 
@@ -27,9 +29,10 @@ public class EventsFileReader {
     private EventsRepo eventsRepo;
     
     // cron = ss mm hh dd mm dayOfWeek
-    // @Scheduled(cron="0 30 10 * * ?") //every day at 10 30
-    @Scheduled(cron="0 * * ? * *") // every minute
+    @Scheduled(cron="0 30 10 * * ?") //every day at 10 30
+    // @Scheduled(cron="0 * * ? * *") // every minute
     @Transactional
+    @Timed(value="parse.external.file.job", histogram=true)
     void parseExternalFile() {
         logger.info("Getting data from external service: {}");
 

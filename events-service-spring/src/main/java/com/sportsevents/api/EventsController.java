@@ -2,7 +2,6 @@ package com.sportsevents.api;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import com.sportsevents.api.model.ClosedEventModel;
@@ -22,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.core.annotation.Timed;
+
 @RequestMapping("events")
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -30,19 +31,19 @@ public class EventsController {
     EventService eventService;
     
     @GetMapping("/{eventId}")
-    // @RolesAllowed({"admin","facilitator","player"})
+    @Timed(value="get_event.request", histogram=true)
     public Optional<Event> getEvent(@PathVariable("eventId") Long eventId){
         return eventService.getEvent(eventId);
     }
 
     @GetMapping()
-    // @RolesAllowed({"admin","facilitator","player"})
+    @Timed(value="get_events.request", histogram=true)
     public ResponseEntity<List<Event>> getEvents(){
         return ResponseEntity.ok(eventService.getEvents());
     }
 
     @PostMapping
-    // @RolesAllowed({"admin"})
+    @Timed(value="create_event.request", histogram=true)
     public ResponseEntity<Event> createEvent(@Valid EventModel event){
         try{ 
             Optional<Event> opt = eventService.createEvent(event);
@@ -56,8 +57,8 @@ public class EventsController {
         }
     }
 
-    // @RolesAllowed({"player"})
     @PatchMapping("/addPlayer")
+    @Timed(value="add_player.request", histogram=true)
     public ResponseEntity addPlayer(@Valid UpdatePlayersModel updatePlayersModel){
 
         if(eventService.addPlayer(updatePlayersModel)){
@@ -68,8 +69,8 @@ public class EventsController {
         
     }
 
-    // @RolesAllowed({"player"})
     @PatchMapping("/removePlayer")
+    @Timed(value="remove_player.request", histogram=true)
     public ResponseEntity removePlayer(@Valid UpdatePlayersModel updatePlayersModel){
 
         if(eventService.removePlayer(updatePlayersModel)){
@@ -80,8 +81,8 @@ public class EventsController {
         
     }
 
-    // @RolesAllowed({"admin", "facilitator"})
     @PostMapping("/closeEvent")
+    @Timed(value="close_event.request", histogram=true)
     public ResponseEntity closeEvent(@Valid ClosedEventModel closedEventModel){
 
         if(eventService.closeEvent(closedEventModel)){
@@ -93,7 +94,7 @@ public class EventsController {
     }
 
     @DeleteMapping("/{id}")
-    // @RolesAllowed({"admin"})
+    @Timed(value="delete_event.request", histogram=true)
     public ResponseEntity delete(@PathVariable("id") Long id){
         eventService.deleteEvent(id);
         return ResponseEntity.status(204).build();

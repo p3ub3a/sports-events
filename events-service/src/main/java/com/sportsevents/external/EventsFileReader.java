@@ -14,6 +14,7 @@ import com.sportsevents.entity.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.micrometer.core.annotation.Timed;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.ScheduledExecution;
 
@@ -23,9 +24,10 @@ public class EventsFileReader {
     private static final Logger logger = LoggerFactory.getLogger(EventsFileReader.class);
     
     // cron = ss mm hh dd mm dayOfWeek
-    // @Scheduled(cron="0 30 10 * * ?") //every day at 10 30
-    @Scheduled(cron="0 * * ? * *") // every minute
+    @Scheduled(cron="0 30 10 * * ?") //every day at 10 30
+    // @Scheduled(cron="0 * * ? * *") // every minute
     @Transactional
+    @Timed(value="parse.external.file.job", histogram=true)
     void parseExternalFile(ScheduledExecution execution) {
         logger.info("Getting data from external service: {}", execution.getScheduledFireTime());
 
