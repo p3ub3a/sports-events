@@ -183,6 +183,7 @@ public class EventServiceImpl implements EventService {
         return mapLeaderboard(leaderboard);
     }
 
+    @SuppressWarnings({ "unchecked"})
     private Optional<List<LeaderboardEntryModel>> mapLeaderboard(List<Event> leaderboard){
         List<LeaderboardEntryModel> leaderboardEntryList = new ArrayList<>();
         long rank = 1;

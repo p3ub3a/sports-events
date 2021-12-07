@@ -3,7 +3,6 @@ package com.sportsevents.api;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
