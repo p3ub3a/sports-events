@@ -1,6 +1,7 @@
 package com.sportsevents.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -11,11 +12,14 @@ import javax.transaction.Transactional;
 import com.sportsevents.api.model.UpdatePlayersModel;
 import com.sportsevents.api.model.ClosedEventModel;
 import com.sportsevents.api.model.EventModel;
+import com.sportsevents.api.model.LeaderboardEntryModel;
 import com.sportsevents.entity.Event;
 import com.sportsevents.entity.EventStatus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.quarkus.panache.common.Page;
 
 @ApplicationScoped
 public class EventServiceImpl implements EventService {
@@ -169,5 +173,27 @@ public class EventServiceImpl implements EventService {
                 return players;
             }
         }
+    }
+
+    @Override
+    public Optional<List<LeaderboardEntryModel>> getLeaderboard() {
+        // select e.winner, count(e.winner) as wins from event e where status = 'CLOSED' group by e.winner order by 2 desc limit 20
+        List<Event> leaderboard = Event.find("select e.winner, count(e.winner) as wins from Event e where status = 'CLOSED' group by e.winner order by 2 desc").page(Page.ofSize(20)).firstPage().list();
+
+        return mapLeaderboard(leaderboard);
+    }
+
+    private Optional<List<LeaderboardEntryModel>> mapLeaderboard(List<Event> leaderboard){
+        List<LeaderboardEntryModel> leaderboardEntryList = new ArrayList<>();
+        long rank = 1;
+        for(Object[] row : (List<Object[]>)(Object) leaderboard ){
+            LeaderboardEntryModel leaderboardEntryModel = new LeaderboardEntryModel();
+            leaderboardEntryModel.setRank(rank);
+            leaderboardEntryModel.setPlayerName(String.valueOf(row[0]));
+            leaderboardEntryModel.setGamesWon(Long.valueOf(String.valueOf(row[1])));
+            leaderboardEntryList.add(leaderboardEntryModel);
+            rank++;
+        }
+        return leaderboardEntryList.isEmpty() ? Optional.empty() : Optional.of(leaderboardEntryList);
     }
 }

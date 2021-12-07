@@ -25,6 +25,7 @@ import { NgxMatMomentModule } from '@angular-material-components/moment-adapter'
 import { MatRadioModule} from '@angular/material/radio';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatSelectModule,} from '@angular/material/select';
+import { HoverClassDirective } from './directives/hover-class';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { MatSelectModule,} from '@angular/material/select';
     EditUsersComponent,
     ProfileComponent,
     LeaderboardComponent,
-    HomeComponent
+    HomeComponent,
+    HoverClassDirective
   ],
   imports: [
     BrowserModule,

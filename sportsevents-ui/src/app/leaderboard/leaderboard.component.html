@@ -1,1 +1,19 @@
-<h1>leaderboard works!</h1>
+<h1>Leaderboard</h1>
+
+
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Games won</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let leaderboardEntry of leaderboardEntries" hover-class="active-row">
+            <th>{{leaderboardEntry.rank}}</th>
+            <th>{{leaderboardEntry.playerName}}</th>
+            <th>{{leaderboardEntry.gamesWon}}</th>
+        </tr>
+    </tbody>
+</table>
