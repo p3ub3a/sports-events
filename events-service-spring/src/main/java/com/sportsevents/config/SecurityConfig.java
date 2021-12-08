@@ -1,43 +1,32 @@
 package com.sportsevents.config;
 
-import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 
-@Configuration
-@EnableWebMvc
 @KeycloakConfiguration
 class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
-    @Bean
-   public org.keycloak.adapters.KeycloakConfigResolver KeycloakConfigResolver() {
-      return new KeycloakSpringBootConfigResolver();
-   }
-   
-    /**
-     * Registers the KeycloakAuthenticationProvider with the authentication manager.
-     */
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    @Override
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+        // return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+        return new NullAuthenticatedSessionStrategy();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(keycloakAuthenticationProvider());
     }
 
-    /**
-     * Defines the session authentication strategy.
-     */
-    @Bean
     @Override
-    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new NullAuthenticatedSessionStrategy();
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/actuator/**");
     }
 
     @Override
@@ -48,11 +37,13 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/events").authenticated()
                 .antMatchers(HttpMethod.GET, "/events/*").authenticated()
-                .antMatchers(HttpMethod.POST, "/events/").hasRole("admin")
-                .antMatchers(HttpMethod.POST, "/closeEvent/").hasAnyRole("admin","facilitator")
-                .antMatchers(HttpMethod.PATCH, "/addPlayer/").hasRole("player")
-                .antMatchers(HttpMethod.PATCH, "/removePlayer/").hasRole("player")
-                .antMatchers(HttpMethod.DELETE, "/events/*").hasRole("admin")
-                .anyRequest().permitAll();
+                .antMatchers(HttpMethod.GET, "/leaderboard").authenticated()
+                .antMatchers(HttpMethod.POST, "/events/").hasAuthority("admin")
+                .antMatchers(HttpMethod.POST, "/events/closeEvent").hasAnyAuthority("admin","facilitator")
+                .antMatchers(HttpMethod.PATCH, "/events/addPlayer").hasAuthority("player")
+                .antMatchers(HttpMethod.PATCH, "/events/removePlayer").hasAuthority("player")
+                .antMatchers(HttpMethod.DELETE, "/events/*").hasAuthority("admin")
+                .anyRequest().permitAll()
+                .and().csrf().disable();
     }
 }

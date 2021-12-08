@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 import com.sportsevents.api.model.UpdatePlayersModel;
 import com.sportsevents.api.model.ClosedEventModel;
 import com.sportsevents.api.model.EventModel;
+import com.sportsevents.api.model.LeaderboardEntryModel;
 import com.sportsevents.entity.Event;
 import com.sportsevents.entity.EventStatus;
 import com.sportsevents.entity.EventsRepo;
@@ -17,6 +18,7 @@ import com.sportsevents.entity.EventsRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -180,5 +182,21 @@ public class EventServiceImpl implements EventService {
                 return players;
             }
         }
+    }
+
+    @Override
+    public Optional<List<LeaderboardEntryModel>> getLeaderboard() {
+        List<LeaderboardEntryModel> leaderboardEntryList = new ArrayList<>();
+        List<Object[]> leaderboard = eventsRepo.getLeaderboard(PageRequest.of(0, 20));
+        long rank = 1;
+        for(Object[] row : leaderboard ){
+            LeaderboardEntryModel leaderboardEntryModel = new LeaderboardEntryModel();
+            leaderboardEntryModel.setRank(rank);
+            leaderboardEntryModel.setPlayerName(String.valueOf(row[0]));
+            leaderboardEntryModel.setGamesWon(Long.valueOf(String.valueOf(row[1])));
+            leaderboardEntryList.add(leaderboardEntryModel);
+            rank++;
+        }
+        return leaderboardEntryList.isEmpty() ? Optional.empty() : Optional.of(leaderboardEntryList);
     }
 }

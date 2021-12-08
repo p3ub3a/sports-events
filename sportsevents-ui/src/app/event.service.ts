@@ -149,13 +149,19 @@ export class EventService {
   }
 
   private extractString(date): string{
-    for(let i=1; i<=5; i++){
-      let str = date[i] + '';
-      if(str.length < 2){
-        date[i] = '0'+date[i];
-      }
-    }
-    return `${date[0]}-${date[1]}-${date[2]}T${date[3]}:${date[4]}`;
+    // console.log(date);
+    // console.log(date[0]+'');
+    // for(let i=1; i<=5; i++){
+    //   let str = date[i] + '';
+    //   if(str.length < 2){
+    //     console.log(str);
+    //     date[i] = '0'+date[i];
+    //   }
+    // }
+    // return `${date[0]}-${date[1]}-${date[2]}T${date[3]}:${date[4]}`;
+
+
+    return date;
     // return `${date[0]}-${date[1]}-${date[2]}T${date[3]}:${date[4]}:${date[5]}`;
   }
 

@@ -3,6 +3,7 @@ package com.sportsevents.api;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -27,9 +28,9 @@ public class LeaderboardResource {
     
     @GET
     @Path("/")
-    // @RolesAllowed({"admin","facilitator","player"})
+    @RolesAllowed({"admin","facilitator","player"})
     @Timed(value="get_leaderboard.request", histogram=true)
-    public Optional<List<LeaderboardEntryModel>> getEvent(){
+    public Optional<List<LeaderboardEntryModel>> getLeaderboard(){
         return eventService.getLeaderboard();
     }
 }

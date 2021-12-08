@@ -32,9 +32,9 @@ services:
       retries: 6
     ports:
       - 5434:5432
-    # volumes:
-    #   - "./scripts/sql/create.sql:/docker-entrypoint-initdb.d/1.sql"
-    #   - "./scripts/sql/insert.sql:/docker-entrypoint-initdb.d/2.sql"
+    volumes:
+      - "./scripts/sql/create.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./scripts/sql/insert.sql:/docker-entrypoint-initdb.d/2.sql"
 
   keycloak:
     image: jboss/keycloak:latest

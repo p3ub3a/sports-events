@@ -7,6 +7,7 @@ import com.sportsevents.api.model.UpdatePlayersModel;
 import com.sportsevents.entity.Event;
 import com.sportsevents.api.model.ClosedEventModel;
 import com.sportsevents.api.model.EventModel;
+import com.sportsevents.api.model.LeaderboardEntryModel;
 
 public interface EventService {
     Optional<Event> createEvent(EventModel event);
@@ -16,4 +17,5 @@ public interface EventService {
     boolean closeEvent(ClosedEventModel closedEventModel);
     boolean addPlayer(UpdatePlayersModel addPlayerModel);
     boolean removePlayer(UpdatePlayersModel addPlayerModel);
+    Optional<List<LeaderboardEntryModel>> getLeaderboard();
 }
