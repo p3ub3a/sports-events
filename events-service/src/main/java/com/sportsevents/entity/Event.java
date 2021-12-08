@@ -2,6 +2,7 @@ package com.sportsevents.entity;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,15 +27,19 @@ public class Event extends PanacheEntityBase{
     private String name;
     private String type;
     private String status;
+    @Column(name = "scheduled_date")
     private LocalDateTime scheduledDate;
     private int duration;
     private boolean outdoors;
+    @Column(name = "closed_date")
     private LocalDateTime closedDate;
     private String facilitator;
+    @Column(name = "closed_by")
     private String closedBy;
     private String location;
     private String winner;
     private String[] players;
+    @Column(name = "max_players")
     private int maxPlayers;
 
     public Event(){}
