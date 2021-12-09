@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const eventRes = this.eventService.getEvent(event).pipe(
       map(result => {
         result=this.eventService.getFutureDate(result);
-        this.selectedEvent = result;
+        this.event = result;
       }),
       catchError(error => {
         console.log(error);
@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   joinEvent(eventId): void{
     this.joinEventSubscription = this.eventService.joinEvent(eventId).subscribe({
       complete: () => {
-        this.showDetails(this.selectedEvent);
+        this.showDetails(this.event);
       }
     });
   }
