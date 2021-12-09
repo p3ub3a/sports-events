@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       map(results => {
         results=this.eventService.getFutureDates(results);
         this.events = results;
+        console.log(this.events);
       }),
       catchError(error => {
         console.log(error);

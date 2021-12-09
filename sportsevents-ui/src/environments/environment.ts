@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const quarkus_environment = {
+  env: "quarkus",
   production: false,
   keycloak: {
     issuer: 'http://localhost:8081/auth/',
@@ -13,6 +14,7 @@ export const quarkus_environment = {
 };
 
 export const spring_environment = {
+  env: "spring-boot",
   production: false,
   keycloak: {
     issuer: 'http://localhost:8081/auth/',
@@ -22,7 +24,7 @@ export const spring_environment = {
   api_host: 'http://localhost:8089'
 };
 
-export const current_environment = spring_environment;
+export const current_environment = quarkus_environment;
 
 /*
  * For easier debugging in development mode, you can import the following file
