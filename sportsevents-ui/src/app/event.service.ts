@@ -38,6 +38,15 @@ export class EventService {
 
   joinEvent(eventId): Observable<void>{
     const uri = `${this.environment.api_host}/events/addPlayer`;
+    return this.sendPatchForPlayer(uri, eventId);
+  }
+
+  leaveEvent(eventId): Observable<void>{
+    const uri = `${this.environment.api_host}/events/removePlayer`;
+    return this.sendPatchForPlayer(uri, eventId);
+  }
+
+  sendPatchForPlayer(uri, eventId): Observable<void>{
     let player = new AddPlayer();
     player.eventId = eventId;
     player.playerName = this.keycloakService.getUsername();

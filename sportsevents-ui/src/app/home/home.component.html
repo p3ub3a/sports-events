@@ -2,7 +2,7 @@
 <br/>
 <br/>
 <div class="event-container">
-  <div class="event-item" *ngFor="let event of events" (click)="showDetails(event)" [class.selectedEvent]="selectedEvent.id === event.id">
+  <div [ngClass] = "{'event-item': true, 'selectedEvent': selectedEvent?.id === event?.id}" *ngFor="let event of events" (click)="showDetails(event)">
     <span>{{event.type}}</span><span>[{{event.id}}]</span>
     <br/>
     <span>{{event.scheduledDate}}</span>
@@ -23,6 +23,7 @@
   <h4>Participating players: <span>{{event.players}}</span><span>[{{event.players ? event.players.length : 0}}/{{event.maxPlayers}}]</span></h4>
 
   <br/>
-  <button class="button participate" *ngIf="roles.includes('player')" (click)="joinEvent(selectedEvent.id);">Participate</button>
+  <button class="button participate" *ngIf="roles.includes('player') && !isParticipating" (click)="joinEvent(selectedEvent.id);">Join event</button>
+  <button class="button participate" *ngIf="roles.includes('player') && isParticipating" (click)="leaveEvent(selectedEvent.id);">Leave event</button>
   <button class="button participate" *ngIf="roles.includes('admin')" (click)="deleteEvent(selectedEvent)">Delete</button>
 </div>

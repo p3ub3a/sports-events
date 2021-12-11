@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private firstOnSubscription: Subscription;
   private joinEventSubscription: Subscription;
+  private leaveEventSubscription: Subscription;
   private deleteEventSubscription: Subscription;
   private showDetailsSubscription: Subscription;
   roles: string[];
@@ -23,6 +24,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   events: Event[];
   event: Event;
   selectedEvent: Event = null;
+  isParticipating: boolean = false;
   constructor(private eventService: EventService, private keycloakService: KeycloakService) { }
 
   ngOnInit(): void {
@@ -44,6 +46,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.firstOnSubscription.unsubscribe();
     if(this.joinEventSubscription) this.joinEventSubscription.unsubscribe();
+    if(this.leaveEventSubscription) this.leaveEventSubscription.unsubscribe();
     if(this.deleteEventSubscription) this.deleteEventSubscription.unsubscribe();
     if(this.showDetailsSubscription) this.showDetailsSubscription.unsubscribe();
     console.log('unsubscribed from home get events');
@@ -55,6 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const eventRes = this.eventService.getEvent(event).pipe(
       map(result => {
         result=this.eventService.getFutureDate(result);
+        this.isParticipating = this.isPlayerParticipating(result);
         this.event = result;
       }),
       catchError(error => {
@@ -64,9 +68,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
     this.showDetailsSubscription = eventRes.subscribe(data => data);
   }
+  
+  isPlayerParticipating(event): boolean {
+    let playerName = this.keycloakService.getUsername();
+    return event?.players.includes(playerName);
+  }
 
   joinEvent(eventId): void{
     this.joinEventSubscription = this.eventService.joinEvent(eventId).subscribe({
+      complete: () => {
+        this.showDetails(this.event);
+      }
+    });
+  }
+
+  leaveEvent(eventId): void{
+    this.leaveEventSubscription = this.eventService.leaveEvent(eventId).subscribe({
       complete: () => {
         this.showDetails(this.event);
       }
