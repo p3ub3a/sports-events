@@ -1,0 +1,446 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 1,
+  "iteration": 1639274484078,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "exemplar": false,
+          "expr": "timed_get_event_request_seconds_sum{application=\"$application\", instance=\"$instance\"} / \ntimed_get_event_request_seconds_count{application=\"$application\", instance=\"$instance\"}",
+          "format": "time_series",
+          "interval": "",
+          "legendFormat": "get_event",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "timed_get_events_request_seconds_sum{application=\"$application\", instance=\"$instance\"} / \ntimed_get_events_request_seconds_count{application=\"$application\", instance=\"$instance\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "get_events",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "timed_add_player_request_seconds_sum{application=\"$application\", instance=\"$instance\"} /\ntimed_add_player_request_seconds_count{application=\"$application\", instance=\"$instance\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "add_player",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "timed_remove_player_request_seconds_sum{application=\"$application\", instance=\"$instance\"} /\ntimed_remove_player_request_seconds_count{application=\"$application\", instance=\"$instance\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "remove_player",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "timed_create_event_request_seconds_sum{application=\"$application\", instance=\"$instance\"} /\ntimed_create_event_request_seconds_count{application=\"$application\", instance=\"$instance\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "create_event",
+          "refId": "E"
+        },
+        {
+          "exemplar": true,
+          "expr": "timed_close_event_request_seconds_sum{application=\"$application\", instance=\"$instance\"} /\ntimed_close_event_request_seconds_count{application=\"$application\", instance=\"$instance\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "close_event",
+          "refId": "F"
+        },
+        {
+          "exemplar": true,
+          "expr": "timed_get_leaderboard_request_seconds_sum{application=\"$application\", instance=\"$instance\"}/\ntimed_get_leaderboard_request_seconds_count{application=\"$application\", instance=\"$instance\"}",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "get_leaderboard",
+          "refId": "G"
+        }
+      ],
+      "title": "Average request time",
+      "type": "gauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.1.2",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "max_over_time(sum(timed_add_player_request_seconds_max{application=\"$application\", instance=\"$instance\"})[1d:1m])",
+          "interval": "",
+          "legendFormat": "add_player",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "max_over_time(sum(timed_close_event_request_seconds_max{application=\"$application\", instance=\"$instance\"})[1d:1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "close_event",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "max_over_time(sum(timed_create_event_request_seconds_max{application=\"$application\", instance=\"$instance\"})[1d:1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "create_event",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "max_over_time(sum(timed_get_event_request_seconds_max{application=\"$application\", instance=\"$instance\"})[1d:1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "get_event",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "max_over_time(sum(timed_get_events_request_seconds_max{application=\"$application\", instance=\"$instance\"})[1d:1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "get_events",
+          "refId": "E"
+        },
+        {
+          "exemplar": true,
+          "expr": "max_over_time(sum(timed_get_leaderboard_request_seconds_max{application=\"$application\", instance=\"$instance\"})[1d:1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "get_leaderboard",
+          "refId": "F"
+        },
+        {
+          "exemplar": true,
+          "expr": "max_over_time(sum(timed_remove_player_request_seconds_max{application=\"$application\", instance=\"$instance\"})[1d:1m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "remove_player",
+          "refId": "G"
+        }
+      ],
+      "title": "Max request time",
+      "type": "gauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 6,
+        "y": 9
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "rate(counted_create_event_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "interval": "",
+          "legendFormat": "create_event",
+          "refId": "Create event total"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(counted_get_event_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "get_event",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(counted_get_events_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "get_events",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(counted_get_leaderboard_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "get_leaderboard",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(counted_add_player_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "add_player",
+          "refId": "E"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(counted_remove_player_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "remove_palyer",
+          "refId": "F"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(counted_close_event_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "close_event",
+          "refId": "G"
+        },
+        {
+          "exemplar": true,
+          "expr": "rate(counted_delete_event_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "delete_event",
+          "refId": "A"
+        }
+      ],
+      "title": "Total requests counter",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "quarkus-app",
+          "value": "quarkus-app"
+        },
+        "datasource": null,
+        "definition": "label_values(application)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Application",
+        "multi": false,
+        "name": "application",
+        "options": [],
+        "query": {
+          "query": "label_values(application)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "gateway.docker.internal:8082",
+          "value": "gateway.docker.internal:8082"
+        },
+        "datasource": null,
+        "definition": "label_values(jvm_memory_used_bytes{application=\"$application\"}, instance)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Instance",
+        "multi": false,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(jvm_memory_used_bytes{application=\"$application\"}, instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Request timers dashboard",
+  "uid": "1jDMLdtnk",
+  "version": 10
+}
