@@ -31,5 +31,7 @@
   </h4>
   <br/>
   <button class="button participate" *ngIf="roles.includes('admin')" (click)="deleteEvent(selectedEvent)">Delete</button>
-  <button class="button participate" *ngIf="roles.includes('facilitator')" (click)="closeEvent(selectedEvent)">Close</button>
+  <button class="button participate" *ngIf="roles.includes('facilitator') && selectedEvent.status != 'CLOSED'" (click)="closeEvent(selectedEvent)">Close</button>
+
+  <h5 *ngIf="selectedEvent.status === 'CLOSED'">Event is closed</h5>
 </div>

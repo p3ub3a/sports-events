@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   
   isPlayerParticipating(event): boolean {
     let playerName = this.keycloakService.getUsername();
-    return event?.players.includes(playerName);
+    return event?.players?.includes(playerName);
   }
 
   joinEvent(eventId): void{

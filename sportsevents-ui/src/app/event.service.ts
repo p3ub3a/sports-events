@@ -182,8 +182,8 @@ export class EventService {
     let today = new Date();
 
     let yyyy = today.getFullYear().toString();
-    let MM = today.getMonth().toString();
-    let dd = today.getDay().toString();
+    let MM = (today.getMonth()+1).toString();
+    let dd = today.getDate().toString();
     let HH = today.getHours().toString();
     let mm = today.getMinutes().toString();
     // let ss = today.getSeconds().toString();

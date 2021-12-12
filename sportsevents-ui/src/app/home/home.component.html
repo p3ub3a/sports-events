@@ -12,15 +12,15 @@
 <br/>
 <div class = "event-details" *ngIf="selectedEvent!==null">
   <h1>Event details</h1>
-  <h4>ID: <span>{{event.id}}</span></h4>
-  <h4>Name: <span>{{event.name}}</span></h4>
-  <h4>Type: <span>{{event.type}}</span></h4>
-  <h4>Status: <span>{{event.status}}</span></h4>
-  <h4>Facilitator: <span>{{event.facilitator}}</span></h4>
-  <h4>Location: <span>{{event.location}}</span></h4>
-  <h4>Is outdoors: <span>{{event.outdoors}}</span></h4>
-  <h4>Scheduled date: <span>{{event.scheduledDate}}</span></h4>
-  <h4>Participating players: <span>{{event.players}}</span><span>[{{event.players ? event.players.length : 0}}/{{event.maxPlayers}}]</span></h4>
+  <h4>ID: <span>{{selectedEvent.id}}</span></h4>
+  <h4>Name: <span>{{selectedEvent.name}}</span></h4>
+  <h4>Type: <span>{{selectedEvent.type}}</span></h4>
+  <h4>Status: <span>{{selectedEvent.status}}</span></h4>
+  <h4>Facilitator: <span>{{selectedEvent.facilitator}}</span></h4>
+  <h4>Location: <span>{{selectedEvent.location}}</span></h4>
+  <h4>Is outdoors: <span>{{selectedEvent.outdoors}}</span></h4>
+  <h4>Scheduled date: <span>{{selectedEvent.scheduledDate}}</span></h4>
+  <h4>Participating players: <span>{{selectedEvent.players}}</span><span>[{{selectedEvent.players ? selectedEvent.players.length : 0}}/{{selectedEvent.maxPlayers}}]</span></h4>
 
   <br/>
   <button class="button participate" *ngIf="roles.includes('player') && !isParticipating" (click)="joinEvent(selectedEvent.id);">Join event</button>
