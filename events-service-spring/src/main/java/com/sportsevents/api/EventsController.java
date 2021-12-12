@@ -33,19 +33,19 @@ public class EventsController {
     EventService eventService;
     
     @GetMapping("/{eventId}")
-    @Timed(value="get_event.request", histogram=true)
+    @Timed(value="timed.get.event.request", histogram=true)
     public Optional<Event> getEvent(@PathVariable("eventId") Long eventId){
         return eventService.getEvent(eventId);
     }
 
     @GetMapping()
-    @Timed(value="get_events.request", histogram=true)
+    @Timed(value="timed.get.events.request", histogram=true)
     public ResponseEntity<List<Event>> getEvents(){
         return ResponseEntity.ok(eventService.getEvents());
     }
 
     @PostMapping
-    @Timed(value="create_event.request", histogram=true)
+    @Timed(value="timed.create.event.request", histogram=true)
     public ResponseEntity<Event> createEvent(@RequestBody @Valid EventModel event){
         try{ 
             Optional<Event> opt = eventService.createEvent(event);
@@ -60,7 +60,7 @@ public class EventsController {
     }
 
     @PatchMapping("/addPlayer")
-    @Timed(value="add_player.request", histogram=true)
+    @Timed(value="timed.add.player.request", histogram=true)
     public ResponseEntity addPlayer(@RequestBody @Valid UpdatePlayersModel updatePlayersModel){
 
         if(eventService.addPlayer(updatePlayersModel)){
@@ -72,7 +72,7 @@ public class EventsController {
     }
 
     @PatchMapping("/removePlayer")
-    @Timed(value="remove_player.request", histogram=true)
+    @Timed(value="timed.remove.player.request", histogram=true)
     public ResponseEntity removePlayer(@RequestBody @Valid UpdatePlayersModel updatePlayersModel){
 
         if(eventService.removePlayer(updatePlayersModel)){
@@ -84,7 +84,7 @@ public class EventsController {
     }
 
     @PostMapping("/closeEvent")
-    @Timed(value="close_event.request", histogram=true)
+    @Timed(value="timed.close.event.request", histogram=true)
     public ResponseEntity closeEvent(@RequestBody @Valid ClosedEventModel closedEventModel){
 
         if(eventService.closeEvent(closedEventModel)){
@@ -96,7 +96,7 @@ public class EventsController {
     }
 
     @DeleteMapping("/{id}")
-    @Timed(value="delete_event.request", histogram=true)
+    @Timed(value="timed.delete.event.request", histogram=true)
     public ResponseEntity delete(@PathVariable("id") Long id){
         eventService.deleteEvent(id);
         return ResponseEntity.status(204).build();

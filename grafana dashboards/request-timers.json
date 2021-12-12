@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1639274484078,
+  "iteration": 1639276943631,
   "links": [],
   "panels": [
     {
@@ -306,14 +306,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(counted_create_event_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "expr": "rate(timed_create_event_seconds_count{application=\"$application\", instance=\"$instance\"}[5m])",
           "interval": "",
           "legendFormat": "create_event",
           "refId": "Create event total"
         },
         {
           "exemplar": true,
-          "expr": "rate(counted_get_event_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "expr": "rate(timed_get_event_request_seconds_count{application=\"$application\", instance=\"$instance\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "get_event",
@@ -321,7 +321,7 @@
         },
         {
           "exemplar": true,
-          "expr": "rate(counted_get_events_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "expr": "rate(timed_get_events_request_seconds_count{application=\"$application\", instance=\"$instance\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "get_events",
@@ -329,7 +329,7 @@
         },
         {
           "exemplar": true,
-          "expr": "rate(counted_get_leaderboard_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "expr": "rate(timed_get_leaderboard_request_seconds_count{application=\"$application\", instance=\"$instance\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "get_leaderboard",
@@ -337,7 +337,7 @@
         },
         {
           "exemplar": true,
-          "expr": "rate(counted_add_player_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "expr": "rate(timed_add_player_request_seconds_count{application=\"$application\", instance=\"$instance\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "add_player",
@@ -345,7 +345,7 @@
         },
         {
           "exemplar": true,
-          "expr": "rate(counted_remove_player_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "expr": "rate(timed_remove_player_request_seconds_count{application=\"$application\", instance=\"$instance\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "remove_palyer",
@@ -353,7 +353,7 @@
         },
         {
           "exemplar": true,
-          "expr": "rate(counted_close_event_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "expr": "rate(timed_close_event_request_seconds_count{application=\"$application\", instance=\"$instance\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "close_event",
@@ -361,7 +361,7 @@
         },
         {
           "exemplar": true,
-          "expr": "rate(counted_delete_event_request_total{application=\"$application\", instance=\"$instance\"}[5m])",
+          "expr": "rate(timed_delete_event_request_seconds_count{application=\"$application\", instance=\"$instance\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "delete_event",
@@ -442,5 +442,5 @@
   "timezone": "",
   "title": "Request timers dashboard",
   "uid": "1jDMLdtnk",
-  "version": 10
+  "version": 13
 }

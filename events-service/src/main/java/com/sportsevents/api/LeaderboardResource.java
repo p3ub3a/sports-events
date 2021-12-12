@@ -14,7 +14,6 @@ import javax.ws.rs.Produces;
 import com.sportsevents.api.model.LeaderboardEntryModel;
 import com.sportsevents.service.EventService;
 
-import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 
 import javax.ws.rs.core.MediaType;
@@ -31,7 +30,6 @@ public class LeaderboardResource {
     @Path("/")
     @RolesAllowed({"admin","facilitator","player"})
     @Timed(value="timed.get.leaderboard.request", histogram=true)
-    @Counted(value="counted.get.leaderboard.request")
     public Optional<List<LeaderboardEntryModel>> getLeaderboard(){
         return eventService.getLeaderboard();
     }

@@ -22,7 +22,7 @@ public class LeaderboardController {
     EventService eventService;
 
     @GetMapping()
-    @Timed(value="get_leaderboard.request", histogram=true)
+    @Timed(value="timed.get.leaderboard.request", histogram=true)
     public Optional<List<LeaderboardEntryModel>> getLeaderboard(){
         return eventService.getLeaderboard();
     }

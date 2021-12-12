@@ -22,7 +22,6 @@ import com.sportsevents.api.model.EventModel;
 import com.sportsevents.entity.Event;
 import com.sportsevents.service.EventService;
 
-import io.micrometer.core.annotation.Counted;
 import io.micrometer.core.annotation.Timed;
 
 @Path("/events")
@@ -37,7 +36,6 @@ public class EventsResource {
     @Path("/{eventId}")
     @RolesAllowed({"admin","facilitator","player"})
     @Timed(value="timed.get.event.request", histogram=true)
-    @Counted(value="counted.get.event.request")
     public Optional<Event> getEvent(@PathParam("eventId") Long eventId){
         return eventService.getEvent(eventId);
     }
@@ -46,7 +44,6 @@ public class EventsResource {
     @Path("/")
     @RolesAllowed({"admin","facilitator","player"})
     @Timed(value="timed.get.events.request", histogram=true)
-    @Counted(value="counted.get.events.request")
     public Response getEvents(){
         return Response.ok(eventService.getEvents()).status(200).build();
     }
@@ -54,7 +51,6 @@ public class EventsResource {
     @POST
     @RolesAllowed({"admin"})
     @Timed(value="timed.create.event.request", histogram=true)
-    @Counted(value="counted.create.event.request")
     public Response createEvent(@Valid EventModel event){
         try{ 
             Optional<Event> opt = eventService.createEvent(event);
@@ -72,7 +68,6 @@ public class EventsResource {
     @RolesAllowed({"player"})
     @Path("/addPlayer")
     @Timed(value="timed.add.player.request", histogram=true)
-    @Counted(value="counted.add.player.request")
     public Response addPlayer(@Valid UpdatePlayersModel updatePlayersModel){
 
         if(eventService.addPlayer(updatePlayersModel)){
@@ -87,7 +82,6 @@ public class EventsResource {
     @RolesAllowed({"player"})
     @Path("/removePlayer")
     @Timed(value="timed.remove.player.request", histogram=true)
-    @Counted(value="counted.remove.player.request")
     public Response removePlayer(@Valid UpdatePlayersModel updatePlayersModel){
 
         if(eventService.removePlayer(updatePlayersModel)){
@@ -102,7 +96,6 @@ public class EventsResource {
     @RolesAllowed({"admin", "facilitator"})
     @Path("/closeEvent")
     @Timed(value="timed.close.event.request", histogram=true)
-    @Counted(value="counted.close.event.request")
     public Response closeEvent(@Valid ClosedEventModel closedEventModel){
 
         if(eventService.closeEvent(closedEventModel)){
@@ -117,7 +110,6 @@ public class EventsResource {
     @Path("/{id}")
     @RolesAllowed({"admin"})
     @Timed(value="timed.delete.event.request", histogram=true)
-    @Counted(value="counted.delete.event.request")
     public Response delete(@PathParam("id") Long id){
         return Response.ok().status(204).build();
     }
