@@ -17,8 +17,8 @@ export class EventService {
 
   constructor(private http: HttpClient, private keycloakService: KeycloakService){}
 
-  getEvents(): Observable<Event[]>{
-      const uri = `${this.environment.api_host}/events`;
+  getEvents(type): Observable<Event[]>{
+      const uri = `${this.environment.api_host}/events?type=${type}`;
       return this.http.get<Event[]>(uri);
   }
 
@@ -81,14 +81,14 @@ export class EventService {
       }));
   }
 
-  getFutureDates(evs): Event[]{
+  parseDates(evs): Event[]{
     let futureEvs = [];
     evs.forEach(ev => {
       let then = this.extractTime(ev.scheduledDate);
-      if(this.isFuture(then)){
+      // if(this.isFuture(then)){
         ev.scheduledDate = this.formatDate(then);
         futureEvs.push(ev);
-      }
+      // }
     });
     return futureEvs;
   }

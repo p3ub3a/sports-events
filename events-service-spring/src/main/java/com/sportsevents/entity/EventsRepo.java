@@ -28,5 +28,9 @@ public interface EventsRepo extends CrudRepository<Event, Long>{
 
     @Query("select e.winner, count(e.winner) as wins from Event e where status = 'CLOSED' group by e.winner order by 2 desc")
     List<Object[]> getLeaderboard(Pageable pageable);
+
+    List<Event> findByScheduledDateBefore(LocalDateTime givenDate);
+
+    List<Event> findByScheduledDateAfter(LocalDateTime givenDate);
 }
 

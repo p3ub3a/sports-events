@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { EditEventsComponent } from './edit-events/edit-events.component';
 import { EditUsersComponent } from './edit-users/edit-users.component';
+import { FutureEventsComponent } from './future-events/future-events.component';
 import { HomeNavComponent } from './home-nav/home-nav.component';
 import { HomeComponent } from './home/home.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
@@ -14,6 +15,7 @@ const appRoutes: Routes = [
   { path: '', component: HomeNavComponent, children: [
     { path: '', component: HomeComponent },
     { path: 'profile', component: ProfileComponent },
+    { path: 'futureevents', component: FutureEventsComponent },
     { path: 'pastevents', component: PastEventsComponent },
     { path: 'leaderboard', component: LeaderboardComponent },
     { path: 'editevents', component: EditEventsComponent },

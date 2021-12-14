@@ -2,8 +2,13 @@ package com.sportsevents.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.transaction.Transactional;
 
@@ -56,11 +61,38 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getEvents() {
-        Iterable<Event> iterable = eventsRepo.findAll();
-        List<Event> events = new ArrayList<>();
-        iterable.forEach(events::add);
-        return events;
+    public List<Event> getEvents(String type, String userName) {
+        if(type.equalsIgnoreCase("home")){
+            Iterable<Event> iterable = eventsRepo.findAll();
+            List<Event> events = new ArrayList<>();
+            iterable.forEach( e -> {
+                if(e.getPlayers() != null){
+                    if(Arrays.asList(e.getPlayers()).contains(userName)){
+                        events.add(e);
+                    }
+                }
+            });
+            return events;
+            // return Stream.of(events)
+            //     .map(event -> (Event) event)
+            //     .filter(event -> {
+            //         return event.getPlayers() != null ? Arrays.asList(event.getPlayers()).contains(userName) : false;
+            //     })
+            //     .collect(Collectors.toList());
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        if(type.equalsIgnoreCase("future")){
+            return eventsRepo.findByScheduledDateAfter(now);
+        }
+        if(type.equalsIgnoreCase("past")){
+            return eventsRepo.findByScheduledDateBefore(now);
+        }
+
+        return Collections.emptyList();
+        
+        
+        // return events;
     }
 
     @Override

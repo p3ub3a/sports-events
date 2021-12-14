@@ -13,6 +13,8 @@ import { Event } from '../_model';
 })
 export class PastEventsComponent implements OnInit, OnDestroy {
 
+  type: String = "past";
+
   private firstOnSubscription: Subscription;
   private deleteEventSubscription: Subscription;
   private closeEventSubscription: Subscription;
@@ -27,9 +29,9 @@ export class PastEventsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.roles = this.keycloakService.getUserRoles();
-    const events = this.eventService.getEvents().pipe(
+    const events = this.eventService.getEvents(this.type).pipe(
       map(results => {
-        results=this.eventService.getPastDates(results);
+        results=this.eventService.parseDates(results);
         this.events = results;
       }),
       catchError(error => {

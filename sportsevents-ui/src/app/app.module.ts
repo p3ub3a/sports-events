@@ -26,6 +26,8 @@ import { MatRadioModule} from '@angular/material/radio';
 import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatSelectModule,} from '@angular/material/select';
 import { HoverClassDirective } from './directives/hover-class';
+import { EventPageComponent } from './template/event-page/event-page.component';
+import { FutureEventsComponent } from './future-events/future-events.component';
 
 
 @NgModule({
@@ -33,11 +35,13 @@ import { HoverClassDirective } from './directives/hover-class';
     AppComponent,
     HomeNavComponent,
     PastEventsComponent,
+    FutureEventsComponent,
     EditEventsComponent,
     EditUsersComponent,
     ProfileComponent,
     LeaderboardComponent,
     HomeComponent,
+    EventPageComponent,
     HoverClassDirective
   ],
   imports: [

@@ -1,12 +1,16 @@
 package com.sportsevents.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import com.sportsevents.api.model.UpdatePlayersModel;
@@ -20,9 +24,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.quarkus.panache.common.Page;
+import io.quarkus.security.identity.SecurityIdentity;
 
 @ApplicationScoped
 public class EventServiceImpl implements EventService {
+    @Inject
+    private SecurityIdentity identity;
 
     private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
@@ -53,9 +60,33 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getEvents() {
-        return Event.findAll().list().stream().map(event -> (Event) event)
+    public List<Event> getEvents(String type) {
+        if(type.equalsIgnoreCase("home")){
+            String userName = identity.getPrincipal().getName();
+            return Event.findAll().list()
+                .stream()
+                .map(event -> (Event) event)
+                .filter(event -> {
+                    return event.getPlayers() != null ? Arrays.asList(event.getPlayers()).contains(userName) : false;
+                })
                 .collect(Collectors.toList());
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        if(type.equalsIgnoreCase("future")){
+            return Event.find("?1 < scheduledDate", now).list()
+                .stream()
+                .map(event -> (Event) event)
+                .collect(Collectors.toList());
+        }
+        if(type.equalsIgnoreCase("past")){
+            return Event.find("?1 > scheduledDate", now).list()
+                .stream()
+                .map(event -> (Event) event)
+                .collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
     }
 
     @Override

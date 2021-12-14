@@ -1,0 +1,28 @@
+<br/>
+<br/>
+<div class="event-container">
+  <div [ngClass] = "{'event-item': true, 'selectedEvent': selectedEvent?.id === event?.id}" *ngFor="let event of events" (click)="showDetails(event)">
+    <span>{{event.type}}</span><span>[{{event.id}}]</span>
+    <br/>
+    <span>{{event.scheduledDate}}</span>
+  </div>
+</div>
+<br/>
+<br/>
+<div class = "event-details" *ngIf="selectedEvent!==null">
+  <h1>Event details</h1>
+  <h4>ID: <span>{{selectedEvent.id}}</span></h4>
+  <h4>Name: <span>{{selectedEvent.name}}</span></h4>
+  <h4>Type: <span>{{selectedEvent.type}}</span></h4>
+  <h4>Status: <span>{{selectedEvent.status}}</span></h4>
+  <h4>Facilitator: <span>{{selectedEvent.facilitator}}</span></h4>
+  <h4>Location: <span>{{selectedEvent.location}}</span></h4>
+  <h4>Is outdoors: <span>{{selectedEvent.outdoors}}</span></h4>
+  <h4>Scheduled date: <span>{{selectedEvent.scheduledDate}}</span></h4>
+  <h4>Participating players: <span>{{selectedEvent.players}}</span><span>[{{selectedEvent.players ? selectedEvent.players.length : 0}}/{{selectedEvent.maxPlayers}}]</span></h4>
+
+  <br/>
+  <button class="button participate" *ngIf="roles.includes('player') && !isParticipating" (click)="joinEvent(selectedEvent.id);">Join event</button>
+  <button class="button participate" *ngIf="roles.includes('player') && isParticipating" (click)="leaveEvent(selectedEvent.id);">Leave event</button>
+  <button class="button participate" *ngIf="roles.includes('admin')" (click)="deleteEvent(selectedEvent)">Delete</button>
+</div>

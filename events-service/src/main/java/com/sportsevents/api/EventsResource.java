@@ -13,6 +13,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
 
@@ -44,8 +45,8 @@ public class EventsResource {
     @Path("/")
     @RolesAllowed({"admin","facilitator","player"})
     @Timed(value="timed.get.events.request", histogram=true)
-    public Response getEvents(){
-        return Response.ok(eventService.getEvents()).status(200).build();
+    public Response getEvents(@QueryParam("type") String type){
+        return Response.ok(eventService.getEvents(type)).status(200).build();
     }
 
     @POST

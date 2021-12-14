@@ -12,7 +12,7 @@ import com.sportsevents.api.model.LeaderboardEntryModel;
 public interface EventService {
     Optional<Event> createEvent(EventModel event);
     Optional<Event> getEvent(Long id);
-    List<Event> getEvents();
+    List<Event> getEvents(String type);
     void deleteEvent(Long id);
     boolean closeEvent(ClosedEventModel closedEventModel);
     boolean addPlayer(UpdatePlayersModel addPlayerModel);
