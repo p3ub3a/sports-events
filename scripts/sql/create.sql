@@ -20,4 +20,4 @@ create table event (
 
 CREATE SEQUENCE event_id_seq;
 
-ALTER TABLE event ALTER id SET DEFAULT NEXTVAL('event_id_seq');
+-- ALTER TABLE event ALTER id SET DEFAULT NEXTVAL('event_id_seq');

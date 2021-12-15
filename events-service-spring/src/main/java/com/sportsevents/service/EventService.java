@@ -7,12 +7,14 @@ import com.sportsevents.api.model.UpdatePlayersModel;
 import com.sportsevents.entity.Event;
 import com.sportsevents.api.model.ClosedEventModel;
 import com.sportsevents.api.model.EventModel;
+import com.sportsevents.api.model.GetEventsResponse;
 import com.sportsevents.api.model.LeaderboardEntryModel;
+import com.sportsevents.api.model.PaginationRequest;
 
 public interface EventService {
     Optional<Event> createEvent(EventModel event);
     Optional<Event> getEvent(Long id);
-    List<Event> getEvents(String type, String userName);
+    GetEventsResponse getEvents(PaginationRequest paginationRequest, String userName);
     void deleteEvent(Long id);
     boolean closeEvent(ClosedEventModel closedEventModel);
     boolean addPlayer(UpdatePlayersModel addPlayerModel);

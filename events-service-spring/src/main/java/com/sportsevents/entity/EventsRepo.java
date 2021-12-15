@@ -2,6 +2,7 @@ package com.sportsevents.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,8 +30,8 @@ public interface EventsRepo extends CrudRepository<Event, Long>{
     @Query("select e.winner, count(e.winner) as wins from Event e where status = 'CLOSED' group by e.winner order by 2 desc")
     List<Object[]> getLeaderboard(Pageable pageable);
 
-    List<Event> findByScheduledDateBefore(LocalDateTime givenDate);
+    Page<Event> findByScheduledDateBefore(LocalDateTime givenDate, Pageable pageable);
 
-    List<Event> findByScheduledDateAfter(LocalDateTime givenDate);
+    Page<Event> findByScheduledDateAfter(LocalDateTime givenDate, Pageable pageable);
 }
 

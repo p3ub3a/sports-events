@@ -15,7 +15,9 @@ import javax.transaction.Transactional;
 import com.sportsevents.api.model.UpdatePlayersModel;
 import com.sportsevents.api.model.ClosedEventModel;
 import com.sportsevents.api.model.EventModel;
+import com.sportsevents.api.model.GetEventsResponse;
 import com.sportsevents.api.model.LeaderboardEntryModel;
+import com.sportsevents.api.model.PaginationRequest;
 import com.sportsevents.entity.Event;
 import com.sportsevents.entity.EventStatus;
 import com.sportsevents.entity.EventsRepo;
@@ -23,7 +25,9 @@ import com.sportsevents.entity.EventsRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -61,38 +65,44 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getEvents(String type, String userName) {
-        if(type.equalsIgnoreCase("home")){
+    public GetEventsResponse getEvents(PaginationRequest paginationRequest, String userName) {
+        logger.info("Get events, type: {}, pageNum: {}, pageSize: {}",paginationRequest.getType(), paginationRequest.getPageNum(), paginationRequest.getPageSize());
+
+        GetEventsResponse response = new GetEventsResponse();
+        response.setRecords(Collections.emptyList());
+        
+        if(paginationRequest.getType().equalsIgnoreCase("home")){
             Iterable<Event> iterable = eventsRepo.findAll();
             List<Event> events = new ArrayList<>();
+            long[] totalRecords = {0L};
             iterable.forEach( e -> {
                 if(e.getPlayers() != null){
                     if(Arrays.asList(e.getPlayers()).contains(userName)){
                         events.add(e);
+                        totalRecords[0]++;
                     }
                 }
             });
-            return events;
-            // return Stream.of(events)
-            //     .map(event -> (Event) event)
-            //     .filter(event -> {
-            //         return event.getPlayers() != null ? Arrays.asList(event.getPlayers()).contains(userName) : false;
-            //     })
-            //     .collect(Collectors.toList());
+            response.setRecords(events);
+            response.setPagesNr(totalRecords[0]);
         }
 
         LocalDateTime now = LocalDateTime.now();
-        if(type.equalsIgnoreCase("future")){
-            return eventsRepo.findByScheduledDateAfter(now);
-        }
-        if(type.equalsIgnoreCase("past")){
-            return eventsRepo.findByScheduledDateBefore(now);
+        Pageable pageable = PageRequest.of(paginationRequest.getPageNum(),paginationRequest.getPageSize());
+
+        if(paginationRequest.getType().equalsIgnoreCase("future")){
+            Page<Event> page = eventsRepo.findByScheduledDateAfter(now, pageable);
+            response.setRecords(page.get().toList());
+            response.setPagesNr(Long.valueOf(page.getTotalPages()));
         }
 
-        return Collections.emptyList();
-        
-        
-        // return events;
+        if(paginationRequest.getType().equalsIgnoreCase("past")){
+            Page<Event> page = eventsRepo.findByScheduledDateBefore(now, pageable);
+            response.setRecords(page.get().toList());
+            response.setPagesNr(Long.valueOf(page.getTotalPages()));
+        }
+
+        return response;
     }
 
     @Override

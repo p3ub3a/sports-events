@@ -1,5 +1,4 @@
 package com.sportsevents.api;
-import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +6,8 @@ import javax.validation.Valid;
 
 import com.sportsevents.api.model.ClosedEventModel;
 import com.sportsevents.api.model.EventModel;
+import com.sportsevents.api.model.GetEventsResponse;
+import com.sportsevents.api.model.PaginationRequest;
 import com.sportsevents.api.model.UpdatePlayersModel;
 import com.sportsevents.entity.Event;
 import com.sportsevents.service.EventService;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.micrometer.core.annotation.Timed;
@@ -43,10 +43,10 @@ public class EventsController {
 
     @GetMapping()
     @Timed(value="timed.get.events.request", histogram=true)
-    public ResponseEntity<List<Event>> getEvents(@RequestParam("type") String type, HttpServletRequest request){
+    public ResponseEntity<GetEventsResponse> getEvents(@Valid PaginationRequest paginationRequest, HttpServletRequest request){
         KeycloakAuthenticationToken principal = (KeycloakAuthenticationToken) request.getUserPrincipal();
         String userName = principal.getAccount().getKeycloakSecurityContext().getToken().getPreferredUsername();
-        return ResponseEntity.ok(eventService.getEvents(type, userName));
+        return ResponseEntity.ok(eventService.getEvents(paginationRequest, userName));
     }
 
     @PostMapping

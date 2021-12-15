@@ -5,6 +5,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,13 +14,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.MediaType;
 
 import com.sportsevents.api.model.UpdatePlayersModel;
 import com.sportsevents.api.model.ClosedEventModel;
 import com.sportsevents.api.model.EventModel;
+import com.sportsevents.api.model.PageRequest;
 import com.sportsevents.entity.Event;
 import com.sportsevents.service.EventService;
 
@@ -45,8 +46,8 @@ public class EventsResource {
     @Path("/")
     @RolesAllowed({"admin","facilitator","player"})
     @Timed(value="timed.get.events.request", histogram=true)
-    public Response getEvents(@QueryParam("type") String type){
-        return Response.ok(eventService.getEvents(type)).status(200).build();
+    public Response getEvents(@BeanParam PageRequest pageRequest){
+        return Response.ok(eventService.getEvents(pageRequest)).status(200).build();
     }
 
     @POST

@@ -1,6 +1,5 @@
 package com.sportsevents.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,13 +15,16 @@ import javax.transaction.Transactional;
 import com.sportsevents.api.model.UpdatePlayersModel;
 import com.sportsevents.api.model.ClosedEventModel;
 import com.sportsevents.api.model.EventModel;
+import com.sportsevents.api.model.GetEventsResponse;
 import com.sportsevents.api.model.LeaderboardEntryModel;
+import com.sportsevents.api.model.PageRequest;
 import com.sportsevents.entity.Event;
 import com.sportsevents.entity.EventStatus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Page;
 import io.quarkus.security.identity.SecurityIdentity;
 
@@ -60,33 +62,69 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getEvents(String type) {
-        if(type.equalsIgnoreCase("home")){
-            String userName = identity.getPrincipal().getName();
-            return Event.findAll().list()
-                .stream()
-                .map(event -> (Event) event)
-                .filter(event -> {
-                    return event.getPlayers() != null ? Arrays.asList(event.getPlayers()).contains(userName) : false;
-                })
-                .collect(Collectors.toList());
+    public GetEventsResponse getEvents(PageRequest pageRequest) {
+        logger.info("Get events, type: {}, pageNum: {}, pageSize: {}",pageRequest.getType(), pageRequest.getPageNum(), pageRequest.getPageSize());
+
+        GetEventsResponse response = new GetEventsResponse();
+        response.setRecords(Collections.emptyList());
+
+        if(pageRequest.getType().equalsIgnoreCase("home")){
+            runHomeQuery(response);
         }
 
         LocalDateTime now = LocalDateTime.now();
-        if(type.equalsIgnoreCase("future")){
-            return Event.find("?1 < scheduledDate", now).list()
-                .stream()
-                .map(event -> (Event) event)
-                .collect(Collectors.toList());
+        if(pageRequest.getType().equalsIgnoreCase("future")){
+            runFutureQuery(pageRequest, response, now);
         }
-        if(type.equalsIgnoreCase("past")){
-            return Event.find("?1 > scheduledDate", now).list()
-                .stream()
-                .map(event -> (Event) event)
-                .collect(Collectors.toList());
+        if(pageRequest.getType().equalsIgnoreCase("past")){
+            runPastQuery(pageRequest, response, now);
         }
 
-        return Collections.emptyList();
+        return response;
+    }
+
+    private void runHomeQuery(GetEventsResponse response) {
+        String userName = identity.getPrincipal().getName();
+        long[] counter = {0L};
+        
+        response.setRecords(Event.findAll()
+            .list()
+            .stream()
+            .map(event -> (Event) event)
+            .filter(event -> {
+                if(event.getPlayers() != null){
+                    boolean isParticipating = Arrays.asList(event.getPlayers()).contains(userName);
+                    if(isParticipating){
+                        counter[0] ++;
+                        return isParticipating;
+                    }
+                }
+                return  false;
+            })
+            .collect(Collectors.toList())
+        );
+        response.setPagesNr(counter[0]);
+    }
+
+    private void runFutureQuery(PageRequest pageRequest, GetEventsResponse response, LocalDateTime now) {
+        PanacheQuery<Event> panacheQuery = Event.find("?1 < scheduledDate", now);
+        response.setPagesNr(Long.valueOf(panacheQuery.pageCount()));
+        response.setRecords(panacheQuery
+            .page(pageRequest.getPageNum(), pageRequest.getPageSize())
+            .list()
+            .stream()
+            .map(event -> (Event) event)
+            .collect(Collectors.toList()));
+    }
+
+    private void runPastQuery(PageRequest pageRequest, GetEventsResponse response, LocalDateTime now) {
+        PanacheQuery<Event> panacheQuery = Event.find("?1 > scheduledDate", now);
+        response.setPagesNr(Long.valueOf(panacheQuery.pageCount()));
+        response.setRecords(panacheQuery.page(pageRequest.getPageNum(), pageRequest.getPageSize())
+            .list()
+            .stream()
+            .map(event -> (Event) event)
+            .collect(Collectors.toList()));
     }
 
     @Override
