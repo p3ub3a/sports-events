@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { of } from 'rxjs';
@@ -36,7 +35,7 @@ export class EventPageComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         console.log(this.typeQueryParam);
         this.roles = this.keycloakService.getUserRoles();
-
+        this.paginationService.changePage(new Page(0,5));
         this.pageSubscription = this.paginationService.currentPage.subscribe(page => {
             this.loadEvents(page)
         });
@@ -67,7 +66,6 @@ export class EventPageComponent implements OnInit, OnDestroy {
     }
 
     showDetails(event): void{
-        // this.showDetailsSubscription = this.eventService.getEvent(event);
         const eventRes = this.eventService.getEvent(event).pipe(
             map(result => {
                 result=this.eventService.getFutureDate(result);

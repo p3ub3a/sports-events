@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { PaginationService } from "src/app/pagination.serivce";
 import { Page } from "src/app/_model/page.model";
 

@@ -33,7 +33,7 @@ export class PastEventsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.roles = this.keycloakService.getUserRoles();
-    
+    this.paginationService.changePage(new Page(0,5));
     this.pageSubscription = this.paginationService.currentPage.subscribe(page => {
       this.loadEvents(page)
   });
@@ -64,11 +64,9 @@ export class PastEventsComponent implements OnInit, OnDestroy {
 
   showDetails(event): void{
     this.selectedEvent = event;
-    // this.showDetailsSubscription = this.eventService.getEvent(event);
     const eventRes = this.eventService.getEvent(event).pipe(
       map(result => {
         this.selectedEvent=this.eventService.getPastDate(result);
-        // this.event = result;
       }),
       catchError(error => {
         console.log(error);

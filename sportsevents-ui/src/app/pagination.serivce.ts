@@ -9,10 +9,13 @@ import { Page } from "./_model/page.model";
 export class PaginationService{
     private environment = env.current_environment;
 
-    private pageSource = new BehaviorSubject<Page>(new Page(0,5));
-    currentPage = this.pageSource.asObservable();
+    private pageSource:BehaviorSubject<Page>;
+    currentPage:Observable<Page>;
 
-    constructor(){}
+    constructor(){
+        this.pageSource = new BehaviorSubject<Page>(new Page(0,5));
+        this.currentPage = this.pageSource.asObservable();
+    }
 
     changePage(page: Page){
         this.pageSource.next(page);

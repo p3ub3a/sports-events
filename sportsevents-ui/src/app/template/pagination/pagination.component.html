@@ -6,40 +6,40 @@
   />
 <div class="pagination">
   <ul *ngIf = "lastPage > 0">
-    <li *ngIf="currentPage > 1" class="btn prev" (click)="pagination.prev()">
+    <li *ngIf="currentPage > 1" class="btn prev noselect" (click)="pagination.prev()">
       <span><i class="material-icons align-center">navigate_before</i> Prev</span>
     </li>
 
-    <li [ngClass] = "{'numb': true, 'active': currentPage === firstPage}" (click)="pagination.current(firstPage)">
+    <li [ngClass] = "{'numb': true, 'active': currentPage === firstPage, 'noselect': true}" (click)="pagination.current(firstPage)">
       <span>{{ firstPage }}</span>
     </li>
-    <li *ngIf="beforePage - firstPage > 1 && lastPage > 5" class="dots">
+    <li *ngIf="beforePage - firstPage > 1 && lastPage > 5" class="dots noselect">
       <span>...</span>
     </li>
-    <li class="beforePage" *ngIf="beforePage !== undefined && beforePage !== lastPage && beforePage !== firstPage && beforePage !== currentPage" [ngClass] = "{'numb': true}" (click)="pagination.current(beforePage)">
+    <li class="beforePage" *ngIf="beforePage !== undefined && beforePage !== lastPage && beforePage !== firstPage && beforePage !== currentPage" [ngClass] = "{'numb': true, 'noselect': true}" (click)="pagination.current(beforePage)">
       <span>{{ beforePage }}</span>
     </li>
-    <li class="thirdLast" *ngIf="thirdLast !== undefined && thirdLast !== currentPage && thirdLast !== beforePage && thirdLast !== afterPage  && lastPage >= 3 && (currentPage >= lastPage - 3)" [ngClass] = "{'numb': true}" (click)="pagination.current(thirdLast)">
+    <li class="thirdLast" *ngIf="thirdLast !== undefined && thirdLast !== currentPage && thirdLast !== beforePage && thirdLast !== afterPage  && lastPage >= 3 && (currentPage >= lastPage - 3)" [ngClass] = "{'numb': true, 'noselect': true}" (click)="pagination.current(thirdLast)">
       <span>{{ thirdLast }}</span>
     </li>
     <li class="currentPage" *ngIf="currentPage !== lastPage && currentPage !== firstPage" [ngClass] = "{'numb': true, 'active': true}" (click)="pagination.current(currentPage)">
       <span>{{ currentPage }}</span>
     </li>
-    <li class="middlePage" *ngIf="middlePage !== undefined && middlePage !== currentPage && middlePage !== beforePage && middlePage !== afterPage  && lastPage >= 3 && (currentPage <= firstPage + 3)" [ngClass] = "{'numb': true}" (click)="pagination.current(middlePage)">
+    <li class="middlePage" *ngIf="middlePage !== undefined && middlePage !== currentPage && middlePage !== beforePage && middlePage !== afterPage  && lastPage >= 3 && (currentPage <= firstPage + 3)" [ngClass] = "{'numb': true, 'noselect': true}" (click)="pagination.current(middlePage)">
       <span>{{ middlePage }}</span>
     </li>
-    <li class="afterPage" *ngIf="afterPage !== undefined && afterPage !== lastPage && afterPage !== firstPage && afterPage !== currentPage" [ngClass] = "{'numb': true}" (click)="pagination.current(afterPage)">
+    <li class="afterPage" *ngIf="afterPage !== undefined && afterPage !== lastPage && afterPage !== firstPage && afterPage !== currentPage" [ngClass] = "{'numb': true, 'noselect': true}" (click)="pagination.current(afterPage)">
       <span>{{ afterPage }}</span>
     </li>
-    <li *ngIf="lastPage - middlePage > 2 || lastPage - afterPage > 1" class="dots">
+    <li *ngIf="lastPage - middlePage > 2 || lastPage - afterPage > 1" class="dots noselect">
       <span>...</span>
     </li>
-    <li *ngIf="lastPage > firstPage" [ngClass] = "{'numb': true, 'active': currentPage === lastPage}" (click)="pagination.current(lastPage)">
+    <li *ngIf="lastPage > firstPage" [ngClass] = "{'numb': true, 'active': currentPage === lastPage, 'noselect': true}" (click)="pagination.current(lastPage)">
       <span>{{ lastPage }}</span>
     </li>
     
     
-    <li *ngIf="currentPage < lastPage" class="btn next" (click)="pagination.next()">
+    <li *ngIf="currentPage < lastPage" class="btn next noselect" (click)="pagination.next()">
       <span>Next<i class="material-icons align-center">navigate_next</i></span>
     </li>
   </ul>
