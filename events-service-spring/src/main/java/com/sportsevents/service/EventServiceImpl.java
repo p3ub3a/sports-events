@@ -83,8 +83,13 @@ public class EventServiceImpl implements EventService {
                     }
                 }
             });
-            response.setRecords(events);
-            response.setPagesNr(totalRecords[0]);
+            
+            int pagesNr = Double.valueOf(Math.ceil((double)totalRecords[0] / paginationRequest.getPageSize())).intValue();
+            int pageNum = paginationRequest.getPageNum();
+            response.setPagesNr(pagesNr);
+            if(events.size() > 0){
+                response.setRecords(events.subList(paginationRequest.getPageNum() * paginationRequest.getPageSize(), (int) Math.min(++pageNum * paginationRequest.getPageSize(), events.size())));
+            }
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -93,13 +98,13 @@ public class EventServiceImpl implements EventService {
         if(paginationRequest.getType().equalsIgnoreCase("future")){
             Page<Event> page = eventsRepo.findByScheduledDateAfter(now, pageable);
             response.setRecords(page.get().toList());
-            response.setPagesNr(Long.valueOf(page.getTotalPages()));
+            response.setPagesNr(page.getTotalPages());
         }
 
         if(paginationRequest.getType().equalsIgnoreCase("past")){
             Page<Event> page = eventsRepo.findByScheduledDateBefore(now, pageable);
             response.setRecords(page.get().toList());
-            response.setPagesNr(Long.valueOf(page.getTotalPages()));
+            response.setPagesNr(page.getTotalPages());
         }
 
         return response;

@@ -5,15 +5,15 @@ import java.util.List;
 import com.sportsevents.entity.Event;
 
 public class GetEventsResponse {
-    private Long pagesNr;
+    private int pagesNr;
 
     private List<Event> records;
 
-    public Long getPagesNr() {
+    public int getPagesNr() {
         return this.pagesNr;
     }
 
-    public void setPagesNr(Long pagesNr) {
+    public void setPagesNr(int pagesNr) {
         this.pagesNr = pagesNr;
     }
 

@@ -16,6 +16,7 @@ import { Page } from "src/app/_model/page.model";
     beforePage: number;
     afterPage: number;
     middlePage: number;
+    thirdLast: number;
 
     constructor(private paginationService: PaginationService){}
     
@@ -46,14 +47,22 @@ import { Page } from "src/app/_model/page.model";
       if(this.lastPage > 3){
         if(this.currentPage <= this.firstPage + 3){
           this.beforePage = this.firstPage + 1;
+          
           this.middlePage = this.firstPage + 2;
           this.afterPage = this.firstPage + 3;
         }
         if(this.currentPage >= this.lastPage - 3){
           this.beforePage = this.lastPage - 3;
-          this.middlePage = this.lastPage - 2;
+          this.thirdLast = this.lastPage - 2;
           this.afterPage = this.lastPage - 1;
         }
+        if(this.currentPage < this.thirdLast){
+          this.thirdLast = undefined;
+        }
+        if(this.currentPage > this.middlePage){
+          this.middlePage = undefined;
+        }
+        
         if(this.currentPage >= this.firstPage + 3 && this.currentPage <= this.lastPage - 3){
           this.beforePage = this.currentPage - 1;
           this.afterPage = this.currentPage + 1;

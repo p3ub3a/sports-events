@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
         response.setRecords(Collections.emptyList());
 
         if(pageRequest.getType().equalsIgnoreCase("home")){
-            runHomeQuery(response);
+            runHomeQuery(pageRequest, response);
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -83,11 +83,11 @@ public class EventServiceImpl implements EventService {
         return response;
     }
 
-    private void runHomeQuery(GetEventsResponse response) {
+    private void runHomeQuery(PageRequest pageRequest, GetEventsResponse response) {
         String userName = identity.getPrincipal().getName();
-        long[] counter = {0L};
+        long[] totalRecords = {0L};
         
-        response.setRecords(Event.findAll()
+        List<Event> events = Event.findAll()
             .list()
             .stream()
             .map(event -> (Event) event)
@@ -95,22 +95,26 @@ public class EventServiceImpl implements EventService {
                 if(event.getPlayers() != null){
                     boolean isParticipating = Arrays.asList(event.getPlayers()).contains(userName);
                     if(isParticipating){
-                        counter[0] ++;
+                        totalRecords[0] ++;
                         return isParticipating;
                     }
                 }
                 return  false;
             })
-            .collect(Collectors.toList())
-        );
-        response.setPagesNr(counter[0]);
+            .collect(Collectors.toList());
+
+        int pagesNr = Double.valueOf(Math.ceil((double)totalRecords[0] / pageRequest.getPageSize())).intValue();
+        int pageNum = pageRequest.getPageNum();
+        response.setPagesNr(pagesNr);
+        if(events.size() > 0){
+            response.setRecords(events.subList(pageRequest.getPageNum() * pageRequest.getPageSize(), (int) Math.min(++pageNum * pageRequest.getPageSize(), events.size())));
+        }   
     }
 
     private void runFutureQuery(PageRequest pageRequest, GetEventsResponse response, LocalDateTime now) {
-        PanacheQuery<Event> panacheQuery = Event.find("?1 < scheduledDate", now);
-        response.setPagesNr(Long.valueOf(panacheQuery.pageCount()));
+        PanacheQuery<Event> panacheQuery = Event.find("?1 < scheduledDate", now).page(pageRequest.getPageNum(), pageRequest.getPageSize());
+        response.setPagesNr(panacheQuery.pageCount());
         response.setRecords(panacheQuery
-            .page(pageRequest.getPageNum(), pageRequest.getPageSize())
             .list()
             .stream()
             .map(event -> (Event) event)
@@ -118,9 +122,9 @@ public class EventServiceImpl implements EventService {
     }
 
     private void runPastQuery(PageRequest pageRequest, GetEventsResponse response, LocalDateTime now) {
-        PanacheQuery<Event> panacheQuery = Event.find("?1 > scheduledDate", now);
-        response.setPagesNr(Long.valueOf(panacheQuery.pageCount()));
-        response.setRecords(panacheQuery.page(pageRequest.getPageNum(), pageRequest.getPageSize())
+        PanacheQuery<Event> panacheQuery = Event.find("?1 > scheduledDate", now).page(pageRequest.getPageNum(), pageRequest.getPageSize());
+        response.setPagesNr(panacheQuery.pageCount());
+        response.setRecords(panacheQuery
             .list()
             .stream()
             .map(event -> (Event) event)

@@ -19,16 +19,19 @@
     <li class="beforePage" *ngIf="beforePage !== undefined && beforePage !== lastPage && beforePage !== firstPage && beforePage !== currentPage" [ngClass] = "{'numb': true}" (click)="pagination.current(beforePage)">
       <span>{{ beforePage }}</span>
     </li>
+    <li class="thirdLast" *ngIf="thirdLast !== undefined && thirdLast !== currentPage && thirdLast !== beforePage && thirdLast !== afterPage  && lastPage >= 3 && (currentPage >= lastPage - 3)" [ngClass] = "{'numb': true}" (click)="pagination.current(thirdLast)">
+      <span>{{ thirdLast }}</span>
+    </li>
     <li class="currentPage" *ngIf="currentPage !== lastPage && currentPage !== firstPage" [ngClass] = "{'numb': true, 'active': true}" (click)="pagination.current(currentPage)">
       <span>{{ currentPage }}</span>
     </li>
-    <li class="middlePage" *ngIf="middlePage !== currentPage && middlePage !== beforePage && middlePage !== afterPage  && lastPage >= 3 && (currentPage <= firstPage + 3 || currentPage >= lastPage - 3)" [ngClass] = "{'numb': true}" (click)="pagination.current(currentPage)">
+    <li class="middlePage" *ngIf="middlePage !== undefined && middlePage !== currentPage && middlePage !== beforePage && middlePage !== afterPage  && lastPage >= 3 && (currentPage <= firstPage + 3)" [ngClass] = "{'numb': true}" (click)="pagination.current(middlePage)">
       <span>{{ middlePage }}</span>
     </li>
     <li class="afterPage" *ngIf="afterPage !== undefined && afterPage !== lastPage && afterPage !== firstPage && afterPage !== currentPage" [ngClass] = "{'numb': true}" (click)="pagination.current(afterPage)">
       <span>{{ afterPage }}</span>
     </li>
-    <li *ngIf="lastPage - middlePage > 2" class="dots">
+    <li *ngIf="lastPage - middlePage > 2 || lastPage - afterPage > 1" class="dots">
       <span>...</span>
     </li>
     <li *ngIf="lastPage > firstPage" [ngClass] = "{'numb': true, 'active': currentPage === lastPage}" (click)="pagination.current(lastPage)">
