@@ -4,6 +4,8 @@ import { KeycloakService } from 'keycloak-angular';
 import { of } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { PaginationService } from 'src/app/pagination.serivce';
+import { Page } from 'src/app/_model/page.model';
 import { EventService } from '../../event.service';
 import { Event } from '../../_model';
 
@@ -21,28 +23,23 @@ export class EventPageComponent implements OnInit, OnDestroy {
     private leaveEventSubscription: Subscription;
     private deleteEventSubscription: Subscription;
     private showDetailsSubscription: Subscription;
-    roles: string[];
+    private pageSubscription: Subscription;
 
+    roles: string[];
     events: Event[];
     selectedEvent: Event = null;
     isParticipating: boolean = false;
-    constructor(private eventService: EventService, private keycloakService: KeycloakService) { }
+    pagesNr: number;
+
+    constructor(private eventService: EventService, private keycloakService: KeycloakService, private paginationService: PaginationService) { }
 
     ngOnInit(): void {
         console.log(this.typeQueryParam);
         this.roles = this.keycloakService.getUserRoles();
-        const events = this.eventService.getEvents(this.typeQueryParam).pipe(
-            map(results => {
-                results=this.eventService.parseDates(results);
-                this.events = results;
-                console.log(this.events);
-            }),
-            catchError(error => {
-                console.log(error);
-                return of([]);
-            })
-    );
-    this.firstOnSubscription = events.subscribe(data => data);
+
+        this.pageSubscription = this.paginationService.currentPage.subscribe(page => {
+            this.loadEvents(page)
+        });
     }
 
     ngOnDestroy(): void {
@@ -51,7 +48,22 @@ export class EventPageComponent implements OnInit, OnDestroy {
         if(this.leaveEventSubscription) this.leaveEventSubscription.unsubscribe();
         if(this.deleteEventSubscription) this.deleteEventSubscription.unsubscribe();
         if(this.showDetailsSubscription) this.showDetailsSubscription.unsubscribe();
+        if(this.pageSubscription) this.pageSubscription.unsubscribe();
         console.log('unsubscribed from home get events');
+    }
+
+    loadEvents(page: Page){
+        const events = this.eventService.getEvents(this.typeQueryParam,page.pageNum , page.pageSize).pipe(
+            map(results => {
+                this.events =this.eventService.parseDates(results.records);
+                this.pagesNr = parseInt(results.pagesNr);
+            }),
+            catchError(error => {
+                console.log(error);
+                return of([]);
+            })
+        );
+        this.firstOnSubscription = events.subscribe(data => data);
     }
 
     showDetails(event): void{

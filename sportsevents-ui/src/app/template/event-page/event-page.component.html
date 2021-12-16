@@ -8,6 +8,7 @@
   </div>
 </div>
 <br/>
+<app-pagination *ngIf="pagesNr !== undefined" [lastPage]="pagesNr"></app-pagination>
 <br/>
 <div class = "event-details" *ngIf="selectedEvent!==null">
   <h1>Event details</h1>

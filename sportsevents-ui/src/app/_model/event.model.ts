@@ -1,3 +1,8 @@
+export interface Events {
+    pagesNr: string,
+    records: Event[]
+}
+
 export interface Event {
     id: string,
     name: string,

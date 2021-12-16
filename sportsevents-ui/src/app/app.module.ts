@@ -28,6 +28,8 @@ import { MatSelectModule,} from '@angular/material/select';
 import { HoverClassDirective } from './directives/hover-class';
 import { EventPageComponent } from './template/event-page/event-page.component';
 import { FutureEventsComponent } from './future-events/future-events.component';
+import { PaginationComponent } from './template/pagination/pagination.component';
+import { PaginationDirective } from './directives/pagination.directive';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import { FutureEventsComponent } from './future-events/future-events.component';
     LeaderboardComponent,
     HomeComponent,
     EventPageComponent,
-    HoverClassDirective
+    HoverClassDirective,
+    PaginationDirective,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,

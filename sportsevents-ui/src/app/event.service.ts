@@ -2,7 +2,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { AddPlayer } from './_model/add-player.model';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-import { Event, CloseEvent } from './_model';
+import { Event, CloseEvent, Events } from './_model';
 import * as env  from '../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
@@ -17,9 +17,9 @@ export class EventService {
 
   constructor(private http: HttpClient, private keycloakService: KeycloakService){}
 
-  getEvents(type): Observable<Event[]>{
-      const uri = `${this.environment.api_host}/events?type=${type}`;
-      return this.http.get<Event[]>(uri);
+  getEvents(type,pageNum, pageSize): Observable<Events>{
+      const uri = `${this.environment.api_host}/events?type=${type}&pageNum=${pageNum}&pageSize=${pageSize}`;
+      return this.http.get<Events>(uri);
   }
 
   getEvent(data): Observable<Event>{

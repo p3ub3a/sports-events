@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { EventService } from '../event.service';
 import { Event } from '../_model';
+import { PaginationService } from '../pagination.serivce';
+import { Page } from '../_model/page.model';
 
 @Component({
   selector: 'app-past-events',
@@ -20,19 +22,37 @@ export class PastEventsComponent implements OnInit, OnDestroy {
   private closeEventSubscription: Subscription;
   private showDetailsSubscription: Subscription;
   private roles: string[];
+  private pageSubscription: Subscription;
   selectedWinner;
+  pagesNr: number;
 
   events: Event[];
   event: Event;
   selectedEvent: Event = null;
-  constructor(private eventService: EventService, private keycloakService: KeycloakService) { }
+  constructor(private eventService: EventService, private keycloakService: KeycloakService,private paginationService: PaginationService) { }
 
   ngOnInit(): void {
     this.roles = this.keycloakService.getUserRoles();
-    const events = this.eventService.getEvents(this.type).pipe(
+    
+    this.pageSubscription = this.paginationService.currentPage.subscribe(page => {
+      this.loadEvents(page)
+  });
+  }
+
+  ngOnDestroy(): void {
+    this.firstOnSubscription.unsubscribe();
+    if(this.deleteEventSubscription) this.deleteEventSubscription.unsubscribe();
+    if(this.closeEventSubscription) this.closeEventSubscription.unsubscribe();
+    if(this.showDetailsSubscription) this.showDetailsSubscription.unsubscribe();
+    if(this.pageSubscription) this.pageSubscription.unsubscribe();
+    console.log('unsubscribed from home get events');
+  }
+
+  loadEvents(page: Page){
+    const events = this.eventService.getEvents(this.type, page.pageNum , page.pageSize).pipe(
       map(results => {
-        results=this.eventService.parseDates(results);
-        this.events = results;
+        this.events = this.eventService.parseDates(results.records);
+        this.pagesNr = parseInt(results.pagesNr);
       }),
       catchError(error => {
         console.log(error);
@@ -40,13 +60,6 @@ export class PastEventsComponent implements OnInit, OnDestroy {
       })
     );
     this.firstOnSubscription = events.subscribe(data => data);
-  }
-
-  ngOnDestroy(): void {
-    this.firstOnSubscription.unsubscribe();
-    if(this.deleteEventSubscription) this.deleteEventSubscription.unsubscribe();
-    if(this.closeEventSubscription) this.closeEventSubscription.unsubscribe();
-    console.log('unsubscribed from home get events');
   }
 
   showDetails(event): void{
@@ -62,9 +75,7 @@ export class PastEventsComponent implements OnInit, OnDestroy {
         return of([]);
       })
     );
-    this.showDetailsSubscription = eventRes.subscribe(data => data, err=>console.log(err), () =>{
-    //  this.selectedEvent=event
-    });
+    this.showDetailsSubscription = eventRes.subscribe(data => data, err=>console.log(err), () =>{});
   }
 
   deleteEvent(event): void{
