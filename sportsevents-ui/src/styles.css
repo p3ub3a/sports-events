@@ -82,6 +82,12 @@ a {
   cursor: pointer;
 }
 
+button:disabled{
+  background-color: #cccccc;
+  color: #666666;
+  pointer-events: none;
+}
+
 .participate{
   border: 2px solid #466289;
   color: black;
@@ -100,18 +106,47 @@ a {
 
 .field {
   margin-left: 7px;
-  width:20vw;
+  width: 220px;
 }
 
 .inputField {
   font-size: 16px;
   border: 1px solid #466289;
   height: 25px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
   background:cadetblue;
   color: white;
+}
+
+.v-error{
+  padding: 7px;
+  display:inline-block;
+  background-color: coral; /* Red */
+  font-size: 15px;
+  color: white;
+  width:240px;
+}
+
+.v-errors{
+  margin-bottom: 30px;
+  margin-left: 40px;
+}
+
+/* The close button */
+.close-btn {
+  margin-left: 15px;
+  color: azure;
+  font-weight: bold;
+  float: right;
+  font-size: 16px;
+  line-height: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* When moving the mouse over the close button */
+.close-btn:hover {
+  color: dimgray;
 }
 
 div.settings {
@@ -119,17 +154,18 @@ div.settings {
   grid-template-columns: max-content max-content;
   grid-gap:5px;
 }
-div.settings .label       { text-align:right; }
+
+div.settings .label       { 
+  text-align:right; 
+  font-size: 16px;
+}
 
 select {
-  width: 150px;
+  width: 180px;
   padding: 5px 35px 5px 5px;
   font-size: 16px;
   border: 1px solid #466289;
   height: 30px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
   background: no-repeat cadetblue;
   color: white;
 }

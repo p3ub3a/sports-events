@@ -1,10 +1,30 @@
 <h1>Create event</h1>
 <br/>
-<div class="form-container ">
+<div class="form-container">
   <form #createEvent="ngForm" (ngSubmit)="onSubmit(createEvent)">
+    <div class = "v-errors">
+      <div class="v-error" *ngIf = "type.touched && type.invalid" >
+        <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        Please choose a type
+      </div>
+      <div class="v-error" *ngIf = "facilitator.touched && facilitator.invalid">
+        <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        Please choose a facilitator
+      </div>
+      <div class="v-error" *ngIf = "scheduledDate.touched && scheduledDate.invalid">
+        <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        Please choose a scheduled date
+      </div>
+      <div class="v-error" *ngIf = "location.touched && location.invalid">
+        <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+        Please choose a location
+      </div>
+    </div>
+    
     <div class="settings">
       <span class="label">Type: </span>
-      <select class="field" name="type" id="type" placeholder="Type" ngModel>
+      <select required class="field" name="type" #type="ngModel" ngModel>
+        <option value="" disabled selected>Select the type</option>
         <option selected value="chess" >Chess</option>
         <option value="pingpong">Pingpong</option>
         <option value="swimming">Swimming</option>
@@ -12,16 +32,20 @@
       </select>
 
       <span class="label">Facilitator: </span>
-      <select class="field" name="facilitator" id="facilitator" placeholder="Facilitator" ngModel>
+      <select required class="field" name="facilitator" #facilitator="ngModel" ngModel
+      [class.is-invalid]="facilitator.invalid && facilitator.touched">
+        <option value="" disabled selected>Select the facilitator</option>
         <option *ngFor="let facilitator of facilitators" value="{{facilitator}}" >{{facilitator}}</option>
       </select>
       <span class="label">Scheduled date: </span>
       <mat-form-field class = "field">
-        <input matInput type="datetime-local" name="scheduledDate" ngModel>
+        <input required matInput type="datetime-local" name="scheduledDate" #scheduledDate="ngModel" ngModel>
       </mat-form-field>
 
       <span class="label">Location: </span>
-      <select class="field" name="location" id="location" placeholder="Location" ngModel>
+      <select required class="field" name="location" #location="ngModel" ngModel
+      [class.is-invalid]="location.invalid && location.touched">
+        <option value="" disabled selected>Select the location</option>
         <option selected value="Bucharest" >Bucuresti</option>
         <option value="Timisoara">Timisoara</option>
         <option value="Iasi">Iasi</option>
@@ -29,7 +53,7 @@
       <span class="label">Is outdoors?: </span><input style="margin-left: 7px;" name="outdoors" type="checkbox" ngModel/>
     </div>
     <br/><br/>
-    <button class="button participate" type="submit">Create</button>
+    <button class="button participate" type="submit" [disabled]="createEvent.invalid">Create</button>
   </form>
 </div>
 
