@@ -4,7 +4,6 @@ import { of } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { PaginationService } from 'src/app/pagination.serivce';
-import { Page } from 'src/app/_model/page.model';
 import { EventService } from '../../event.service';
 import { Event } from '../../_model';
 
@@ -15,54 +14,35 @@ import { Event } from '../../_model';
 })
 export class EventPageComponent implements OnInit, OnDestroy {
 
-    @Input() typeQueryParam: String;
+    @Input() isFuture: boolean;
+    @Input() events: Event[];
 
-    private firstOnSubscription: Subscription;
     private joinEventSubscription: Subscription;
     private leaveEventSubscription: Subscription;
     private deleteEventSubscription: Subscription;
+    private closeEventSubscription: Subscription;
     private showDetailsSubscription: Subscription;
-    private pageSubscription: Subscription;
 
     roles: string[];
-    events: Event[];
+    
     selectedEvent: Event = null;
     isParticipating: boolean = false;
-    pagesNr: number;
+    selectedWinner;
 
     constructor(private eventService: EventService, private keycloakService: KeycloakService, private paginationService: PaginationService) { }
 
     ngOnInit(): void {
-        console.log(this.typeQueryParam);
+        console.log("isFuture: " + this.isFuture);
         this.roles = this.keycloakService.getUserRoles();
-        this.paginationService.changePage(new Page(0,5));
-        this.pageSubscription = this.paginationService.currentPage.subscribe(page => {
-            this.loadEvents(page)
-        });
     }
 
     ngOnDestroy(): void {
-        this.firstOnSubscription.unsubscribe();
         if(this.joinEventSubscription) this.joinEventSubscription.unsubscribe();
         if(this.leaveEventSubscription) this.leaveEventSubscription.unsubscribe();
         if(this.deleteEventSubscription) this.deleteEventSubscription.unsubscribe();
         if(this.showDetailsSubscription) this.showDetailsSubscription.unsubscribe();
-        if(this.pageSubscription) this.pageSubscription.unsubscribe();
+        if(this.closeEventSubscription) this.closeEventSubscription.unsubscribe();
         console.log('unsubscribed from home get events');
-    }
-
-    loadEvents(page: Page){
-        const events = this.eventService.getEvents(this.typeQueryParam,page.pageNum , page.pageSize).pipe(
-            map(results => {
-                this.events =this.eventService.parseDates(results.records);
-                this.pagesNr = parseInt(results.pagesNr);
-            }),
-            catchError(error => {
-                console.log(error);
-                return of([]);
-            })
-        );
-        this.firstOnSubscription = events.subscribe(data => data);
     }
 
     showDetails(event): void{
@@ -104,4 +84,28 @@ export class EventPageComponent implements OnInit, OnDestroy {
     deleteEvent(event): void{
         if(event) this.deleteEventSubscription = this.eventService.deleteEvent(event).subscribe();
     }
+
+
+    showPastDetails(event): void{
+        this.selectedEvent = event;
+        const eventRes = this.eventService.getEvent(event).pipe(
+          map(result => {
+            this.selectedEvent=this.eventService.getPastDate(result);
+          }),
+          catchError(error => {
+            console.log(error);
+            return of([]);
+          })
+        );
+        this.showDetailsSubscription = eventRes.subscribe(data => data, err=>console.log(err), () =>{});
+      }
+    
+      closeEvent(event): void{
+        event.winner = this.selectedWinner;
+        this.closeEventSubscription = this.eventService.closeEvent(event).subscribe();
+      }
+    
+      selected(): void{
+        console.log(this.selectedWinner);
+      }
 }

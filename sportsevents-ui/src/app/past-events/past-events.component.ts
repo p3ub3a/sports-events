@@ -17,30 +17,26 @@ export class PastEventsComponent implements OnInit, OnDestroy {
 
   type: String = "past";
 
-  private firstOnSubscription: Subscription;
+  private loadEventsSubscription: Subscription;
   private deleteEventSubscription: Subscription;
   private closeEventSubscription: Subscription;
   private showDetailsSubscription: Subscription;
-  private roles: string[];
   private pageSubscription: Subscription;
   selectedWinner;
-  pagesNr: number;
+  pastPagesNr: number;
+  pastEvents: Event[] = [];
 
-  events: Event[];
-  event: Event;
-  selectedEvent: Event = null;
-  constructor(private eventService: EventService, private keycloakService: KeycloakService,private paginationService: PaginationService) { }
+  constructor(private eventService: EventService, private paginationService: PaginationService) { }
 
   ngOnInit(): void {
-    this.roles = this.keycloakService.getUserRoles();
     this.paginationService.changePage(new Page(0,5));
     this.pageSubscription = this.paginationService.currentPage.subscribe(page => {
       this.loadEvents(page)
-  });
+    });
   }
 
   ngOnDestroy(): void {
-    this.firstOnSubscription.unsubscribe();
+    if(this.loadEventsSubscription) this.loadEventsSubscription.unsubscribe();
     if(this.deleteEventSubscription) this.deleteEventSubscription.unsubscribe();
     if(this.closeEventSubscription) this.closeEventSubscription.unsubscribe();
     if(this.showDetailsSubscription) this.showDetailsSubscription.unsubscribe();
@@ -51,41 +47,14 @@ export class PastEventsComponent implements OnInit, OnDestroy {
   loadEvents(page: Page){
     const events = this.eventService.getEvents(this.type, page.pageNum , page.pageSize).pipe(
       map(results => {
-        this.events = this.eventService.parseDates(results.records);
-        this.pagesNr = parseInt(results.pagesNr);
+        this.pastEvents = this.eventService.parseDates(results.pastRecords);
+        this.pastPagesNr = parseInt(results.pastPagesNr);
       }),
       catchError(error => {
         console.log(error);
         return of([]);
       })
     );
-    this.firstOnSubscription = events.subscribe(data => data);
-  }
-
-  showDetails(event): void{
-    this.selectedEvent = event;
-    const eventRes = this.eventService.getEvent(event).pipe(
-      map(result => {
-        this.selectedEvent=this.eventService.getPastDate(result);
-      }),
-      catchError(error => {
-        console.log(error);
-        return of([]);
-      })
-    );
-    this.showDetailsSubscription = eventRes.subscribe(data => data, err=>console.log(err), () =>{});
-  }
-
-  deleteEvent(event): void{
-    if(event) this.deleteEventSubscription = this.eventService.deleteEvent(event).subscribe();
-  }
-
-  closeEvent(event): void{
-    event.winner = this.selectedWinner;
-    this.closeEventSubscription = this.eventService.closeEvent(event).subscribe();
-  }
-
-  selected(): void{
-    console.log(this.selectedWinner);
+    this.loadEventsSubscription = events.subscribe(data => data);
   }
 }

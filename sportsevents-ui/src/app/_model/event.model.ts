@@ -1,6 +1,8 @@
 export interface Events {
-    pagesNr: string,
-    records: Event[]
+    futurePagesNr: string,
+    pastPagesNr: string,
+    futureRecords: Event[],
+    pastRecords: Event[]
 }
 
 export interface Event {

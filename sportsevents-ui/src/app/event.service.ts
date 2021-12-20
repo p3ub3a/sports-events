@@ -7,6 +7,7 @@ import * as env  from '../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { catchError } from 'rxjs/operators';
+import { HomeEvents } from './_model/home-events.model';
 
 @Injectable({
   providedIn: 'root'
@@ -81,14 +82,26 @@ export class EventService {
       }));
   }
 
+  parseHomeDates(evs): HomeEvents{
+    let homeEvents = new HomeEvents();
+    evs.forEach(ev => {
+      let then = this.extractTime(ev.scheduledDate);
+      ev.scheduledDate = this.formatDate(then);
+      if(this.isFuture(then)){
+        homeEvents.futureEvents.push(ev);
+      }else{
+        homeEvents.pastEvents.push(ev);
+      }
+    });
+    return homeEvents;
+  }
+
   parseDates(evs): Event[]{
     let futureEvs = [];
     evs.forEach(ev => {
       let then = this.extractTime(ev.scheduledDate);
-      // if(this.isFuture(then)){
-        ev.scheduledDate = this.formatDate(then);
-        futureEvs.push(ev);
-      // }
+      ev.scheduledDate = this.formatDate(then);
+      futureEvs.push(ev);
     });
     return futureEvs;
   }
@@ -100,11 +113,10 @@ export class EventService {
     if(ev.scheduledDate){
       then = new Date(this.extractString(ev.scheduledDate)).getTime();
     }
-    if(now < then){
+    // if(now < then){
       ev.scheduledDate = this.formatDate(then);
       return ev;
-    }
-    return null;
+    // }
   }
 
   getPastDates(evs): Event[]{

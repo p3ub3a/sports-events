@@ -1,2 +1,5 @@
 <h1>Future events</h1>
-<app-template-event [typeQueryParam]="type"></app-template-event>
+<br/>
+<br/>
+<app-template-event *ngIf="futureEvents.length > 0" [events]="futureEvents" [isFuture]=true></app-template-event>
+<app-pagination *ngIf="futurePagesNr !== undefined" [lastPage]="futurePagesNr"></app-pagination>

@@ -16,6 +16,7 @@ public class InitialData {
 
     @Transactional
     public void onStart(@Observes StartupEvent ev) {
+        Event.deleteAll();
         for(int i = 0; i < 200; i++){
             Event event = null;
             if(i % 2 == 0){
