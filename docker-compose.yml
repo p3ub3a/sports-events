@@ -16,7 +16,7 @@ services:
       - 5433:5432
     volumes:
       - "./scripts/sql/create.sql:/docker-entrypoint-initdb.d/1.sql"
-      - "./scripts/sql/insert.sql:/docker-entrypoint-initdb.d/2.sql"
+      # - "./scripts/sql/insert.sql:/docker-entrypoint-initdb.d/2.sql"
 
   sportsevents-spring-db:
     image: "postgres"
@@ -34,7 +34,7 @@ services:
       - 5434:5432
     volumes:
       - "./scripts/sql/create.sql:/docker-entrypoint-initdb.d/1.sql"
-      - "./scripts/sql/insert.sql:/docker-entrypoint-initdb.d/2.sql"
+      # - "./scripts/sql/insert.sql:/docker-entrypoint-initdb.d/2.sql"
 
   keycloak:
     image: jboss/keycloak:latest
