@@ -32,7 +32,7 @@
 
 <div *ngIf="!isFuture">
   <div class="event-container">
-    <div class="event-item" *ngFor="let event of events" (click)="showPastDetails(event)" [class.selectedEvent]="selectedEvent === event">
+    <div [ngClass] = "{'event-item': true, 'selectedEvent': selectedEvent?.id === event?.id}" *ngFor="let event of events" (click)="showPastDetails(event)">
       <span>{{event.type}}</span><span>[{{event.id}}]</span>
       <br/>
       <span>{{event.scheduledDate}}</span>

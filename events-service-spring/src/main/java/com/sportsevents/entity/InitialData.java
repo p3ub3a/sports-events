@@ -17,7 +17,7 @@ public class InitialData {
 
     @EventListener
     public void appReady(ApplicationReadyEvent e) {
-        
+        eventsRepo.deleteAll();
         for(int i = 0; i < 200; i++){
             Event event = null;
             if(i % 2 == 0){

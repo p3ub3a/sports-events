@@ -66,27 +66,33 @@ public class EventServiceImpl implements EventService {
         logger.info("Get events, type: {}, pageNum: {}, pageSize: {}",paginationRequest.getType(), paginationRequest.getPageNum(), paginationRequest.getPageSize());
 
         GetEventsResponse response = new GetEventsResponse();
-        response.setRecords(Collections.emptyList());
+        response.setFutureRecords(Collections.emptyList());
+        response.setPastRecords(Collections.emptyList());
         
         if(paginationRequest.getType().equalsIgnoreCase("home")){
             Iterable<Event> iterable = eventsRepo.findAll();
             List<Event> events = new ArrayList<>();
-            long[] totalRecords = {0L};
+
+            //[future-counter, past-counter]
+            long[] totalRecords = {0L, 0L};
+            List<Event> futureEvents = new ArrayList<>();
+            List<Event> pastEvents = new ArrayList<>();
+
             iterable.forEach( e -> {
                 if(e.getPlayers() != null){
                     if(Arrays.asList(e.getPlayers()).contains(userName)){
-                        events.add(e);
-                        totalRecords[0]++;
+                        if(LocalDateTime.now().isBefore(e.getScheduledDate())){
+                            futureEvents.add(e);
+                            totalRecords[0] ++;
+                        }else{
+                            pastEvents.add(e);
+                            totalRecords[1] ++;
+                        }
                     }
                 }
             });
-            
-            int pagesNr = Double.valueOf(Math.ceil((double)totalRecords[0] / paginationRequest.getPageSize())).intValue();
-            int pageNum = paginationRequest.getPageNum();
-            response.setPagesNr(pagesNr);
-            if(events.size() > 0){
-                response.setRecords(events.subList(paginationRequest.getPageNum() * paginationRequest.getPageSize(), (int) Math.min(++pageNum * paginationRequest.getPageSize(), events.size())));
-            }
+            setHomeResponse(paginationRequest, response, totalRecords[0], futureEvents, true);   
+            setHomeResponse(paginationRequest, response, totalRecords[1], pastEvents, false);
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -94,17 +100,35 @@ public class EventServiceImpl implements EventService {
 
         if(paginationRequest.getType().equalsIgnoreCase("future")){
             Page<Event> page = eventsRepo.findByScheduledDateAfter(now, pageable);
-            response.setRecords(page.get().toList());
-            response.setPagesNr(page.getTotalPages());
+            response.setFutureRecords(page.get().toList());
+            response.setFuturePagesNr(page.getTotalPages());
         }
 
         if(paginationRequest.getType().equalsIgnoreCase("past")){
             Page<Event> page = eventsRepo.findByScheduledDateBefore(now, pageable);
-            response.setRecords(page.get().toList());
-            response.setPagesNr(page.getTotalPages());
+            response.setPastRecords(page.get().toList());
+            response.setPastPagesNr(page.getTotalPages());
         }
 
         return response;
+    }
+
+    private void setHomeResponse(PaginationRequest paginationRequest, GetEventsResponse response, long totalRecords, List<Event> events, boolean isFuture) {
+        if(events.size() > 0){
+            int pagesNr = Double.valueOf(Math.ceil((double)totalRecords / paginationRequest.getPageSize())).intValue();
+            int pageNum = paginationRequest.getPageNum();
+            int fromIndex = paginationRequest.getPageNum() * paginationRequest.getPageSize();
+            int toIndex = (int) Math.min(++pageNum * paginationRequest.getPageSize(), events.size());
+            if(fromIndex <= toIndex){
+                if(isFuture){
+                    response.setFutureRecords(events.subList(fromIndex, toIndex));
+                    response.setFuturePagesNr(pagesNr);
+                }else{
+                    response.setPastRecords(events.subList(fromIndex, toIndex));
+                    response.setPastPagesNr(pagesNr);
+                }
+            }
+        }
     }
 
     @Override

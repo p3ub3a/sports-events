@@ -5,32 +5,50 @@ import java.util.List;
 import com.sportsevents.entity.Event;
 
 public class GetEventsResponse {
-    private int pagesNr;
+    private int futurePagesNr;
+    private int pastPagesNr;
+    private List<Event> futureRecords;
+    private List<Event> pastRecords;
 
-    private List<Event> records;
-
-    public int getPagesNr() {
-        return this.pagesNr;
+    public int getFuturePagesNr() {
+        return this.futurePagesNr;
     }
 
-    public void setPagesNr(int pagesNr) {
-        this.pagesNr = pagesNr;
+    public void setFuturePagesNr(int futurePagesNr) {
+        this.futurePagesNr = futurePagesNr;
     }
 
-    public List<Event> getRecords() {
-        return this.records;
+    public int getPastPagesNr() {
+        return this.pastPagesNr;
     }
 
-    public void setRecords(List<Event> records) {
-        this.records = records;
+    public void setPastPagesNr(int pastPagesNr) {
+        this.pastPagesNr = pastPagesNr;
+    }
+
+    public List<Event> getFutureRecords() {
+        return this.futureRecords;
+    }
+
+    public void setFutureRecords(List<Event> futureRecords) {
+        this.futureRecords = futureRecords;
+    }
+
+    public List<Event> getPastRecords() {
+        return this.pastRecords;
+    }
+
+    public void setPastRecords(List<Event> pastRecords) {
+        this.pastRecords = pastRecords;
     }
 
     @Override
     public String toString() {
         return "{" +
-            " totalRecords='" + getPagesNr() + "'" +
-            ", events='" + getRecords() + "'" +
+            " futurePagesNr='" + getFuturePagesNr() + "'" +
+            ", pastPagesNr='" + getPastPagesNr() + "'" +
+            ", futureRecords='" + getFutureRecords() + "'" +
+            ", pastRecords='" + getPastRecords() + "'" +
             "}";
     }
-
 }

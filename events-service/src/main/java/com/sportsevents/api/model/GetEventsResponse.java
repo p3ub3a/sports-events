@@ -7,7 +7,6 @@ import com.sportsevents.entity.Event;
 public class GetEventsResponse {
     private int futurePagesNr;
     private int pastPagesNr;
-
     private List<Event> futureRecords;
     private List<Event> pastRecords;
 
