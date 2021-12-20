@@ -13,6 +13,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.username = this.keycloakService.getUsername();
+    console.log(this.keycloakService);
   }
 
 }

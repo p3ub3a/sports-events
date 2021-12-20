@@ -10,8 +10,11 @@
         <option value="swimming">Swimming</option>
         <option value="tennis">Tennis</option>
       </select>
-      <span class="label">Facilitator: </span><input class="inputField field" name="facilitator" type="text" ngModel/>
 
+      <span class="label">Facilitator: </span>
+      <select class="field" name="facilitator" id="facilitator" placeholder="Facilitator" ngModel>
+        <option *ngFor="let facilitator of facilitators" value="{{facilitator}}" >{{facilitator}}</option>
+      </select>
       <span class="label">Scheduled date: </span>
       <mat-form-field class = "field">
         <input matInput type="datetime-local" name="scheduledDate" ngModel>
