@@ -85,7 +85,6 @@ export class EventPageComponent implements OnInit, OnDestroy {
         if(event) this.deleteEventSubscription = this.eventService.deleteEvent(event).subscribe();
     }
 
-
     showPastDetails(event): void{
         this.selectedEvent = event;
         const eventRes = this.eventService.getEvent(event).pipe(
@@ -100,12 +99,12 @@ export class EventPageComponent implements OnInit, OnDestroy {
         this.showDetailsSubscription = eventRes.subscribe(data => data, err=>console.log(err), () =>{});
       }
     
-      closeEvent(event): void{
-        event.winner = this.selectedWinner;
-        this.closeEventSubscription = this.eventService.closeEvent(event).subscribe();
-      }
-    
-      selected(): void{
-        console.log(this.selectedWinner);
-      }
+    closeEvent(event): void{
+      event.winner = this.selectedWinner;
+      this.closeEventSubscription = this.eventService.closeEvent(event).subscribe();
+    }
+  
+    selected(): void{
+      console.log(this.selectedWinner);
+    }
 }
