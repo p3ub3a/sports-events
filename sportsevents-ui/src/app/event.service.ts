@@ -27,13 +27,13 @@ export class EventService {
     return this.http.get<Event>(uri);
   }
 
-  createEvent(data): void{
+  createEvent(data): Observable<Event>{
     const uri = `${this.environment.api_host}/events`;
-    this.http.post<void>(uri, data).pipe(
+    return this.http.post<Event>(uri, data).pipe(
       catchError(err=>{
         console.log(err);
         return throwError(err);
-      })).subscribe();
+      }));
   }
 
   joinEvent(eventId): Observable<void>{

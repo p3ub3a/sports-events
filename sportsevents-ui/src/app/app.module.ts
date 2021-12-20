@@ -30,6 +30,7 @@ import { EventPageComponent } from './template/event-page/event-page.component';
 import { FutureEventsComponent } from './future-events/future-events.component';
 import { PaginationComponent } from './template/pagination/pagination.component';
 import { PaginationDirective } from './directives/pagination.directive';
+import { IsPastDateDirective } from './directives/validators.directive';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { PaginationDirective } from './directives/pagination.directive';
     EventPageComponent,
     HoverClassDirective,
     PaginationDirective,
-    PaginationComponent
+    PaginationComponent,
+    IsPastDateDirective
   ],
   imports: [
     BrowserModule,

@@ -149,6 +149,17 @@ button:disabled{
   color: dimgray;
 }
 
+.success-msg{
+  padding: 7px;
+  display:inline-block;
+  background-color: aquamarine; /* Red */
+  font-size: 15px;
+  color: midnightblue;
+  width:340px;
+  margin-bottom: 30px;
+  margin-left: 40px;
+}
+
 div.settings {
   display:grid;
   grid-template-columns: max-content max-content;
@@ -168,6 +179,10 @@ select {
   height: 30px;
   background: no-repeat cadetblue;
   color: white;
+}
+
+select.is-invalid {
+  border: 2px solid crimson;
 }
 
 html, body { height: 100%; }
