@@ -9,7 +9,8 @@
 * before running the applications, these 5 services should be started: *sportsevents-quarkus-db*, *sportsevents-spring-db*, *keycloak-db*, ,*keycloak*(user federation framework), *monitoring* (Prometheus service);
 * all HTTP requests are authorized by Keycloak;
 * *./grafana-dashboards* has Grafana json schemas used to monitor the JVM metric & HTTP request metrics provided by Prometheus;
-* *./new-data* has files that are imported by the running backend server (the application updates its *Event* table with the information found in the file).
+* *./new-data* has files that are imported by the running backend server (the application updates its *Event* table with the information found in the file);
+* each project has a *dependency-check-maven* plugin added in *pom.xml* (a OWasp plugin used to generate a library vulnerability report). Run *mvn test org.owasp:dependency-check-maven:check* to generate the report.
 
 #### Application functionalities:
 

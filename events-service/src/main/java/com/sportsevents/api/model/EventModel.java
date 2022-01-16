@@ -23,7 +23,6 @@ public class EventModel {
     @JsonbDateFormat(value = "yyyy'-'MM'-'dd'T'HH':'mm'")
     private LocalDateTime scheduledDate;
 
-    @NotNull
     @JsonbDateFormat(value = "yyyy'-'MM'-'dd'T'HH':'mm'")
     private LocalDateTime closedDate;
     

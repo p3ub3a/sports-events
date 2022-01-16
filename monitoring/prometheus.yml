@@ -14,6 +14,14 @@ scrape_configs:
         - 'gateway.docker.internal:8082'
         labels:
           application: 'quarkus-app'
+  - job_name: 'quarkus-native-events'
+    honor_labels: true
+    metrics_path: '/q/metrics'
+    static_configs:
+      - targets: 
+        - 'localhost:8082'
+        labels:
+          application: 'quarkus-native-app'
   - job_name: 'springboot-events'
     honor_labels: true
     metrics_path: '/actuator/prometheus'
