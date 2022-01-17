@@ -26,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -100,13 +101,13 @@ public class EventServiceImpl implements EventService {
 
         if(paginationRequest.getType().equalsIgnoreCase("future")){
             Page<Event> page = eventsRepo.findByScheduledDateAfter(now, pageable);
-            response.setFutureRecords(page.get().toList());
+            response.setFutureRecords(page.get().collect(Collectors.toList()));
             response.setFuturePagesNr(page.getTotalPages());
         }
 
         if(paginationRequest.getType().equalsIgnoreCase("past")){
             Page<Event> page = eventsRepo.findByScheduledDateBefore(now, pageable);
-            response.setPastRecords(page.get().toList());
+            response.setPastRecords(page.get().collect(Collectors.toList()));
             response.setPastPagesNr(page.getTotalPages());
         }
 
