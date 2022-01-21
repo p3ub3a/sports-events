@@ -2,6 +2,7 @@ package com.sportsevents.entity;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.Random;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -9,15 +10,21 @@ import javax.transaction.Transactional;
 
 import com.sportsevents.service.EventFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.quarkus.runtime.StartupEvent;
 
 @ApplicationScoped
 public class InitialData {
 
+    private static final Logger logger = LoggerFactory.getLogger(InitialData.class);
+
     @Transactional
     public void onStart(@Observes StartupEvent ev) {
         Event.deleteAll();
-        for(int i = 0; i < 200; i++){
+        int records = 200;
+        for(int i = 0; i < records; i++){
             Event event = null;
             if(i % 2 == 0){
                 event = new Event.EventBuilder()
@@ -43,11 +50,13 @@ public class InitialData {
                     .type(EventType.CHESS.toString())
                     .maxPlayers(EventFactory.CHESS_EVENT_MAX_PLAYERS)
                     .players(new String[]{"gica", "gica2"})
-                    .winner("gica2")
+                    .winner(new Random().nextBoolean() ? "gica" : "gica2")
                     .closedDate(LocalDateTime.of(2022,Month.DECEMBER, 3, 10, 30))
                     .build();
             }
-            event.persist();;
+            event.persist();
         }
+
+        logger.info("Loaded initial data {} records", records);
     }
 }
