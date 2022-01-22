@@ -9,7 +9,7 @@ import { UsersByRole } from "./_model/users-by-role.model";
 })
 export class UserService{
     private environment = env.current_environment;
-    private keycloak_client_id: String = "95e50d63-5c91-4f2e-a76e-795ad42e5d9e";
+    private keycloak_client_id: String = "7bed4b4e-43d3-4217-a574-fd85a723f6e3";
     private keycloak_realm: String = "sportsevents-realm";
 
     constructor(private http: HttpClient){}
