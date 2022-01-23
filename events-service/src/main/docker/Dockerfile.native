@@ -14,14 +14,13 @@
 # docker run -i --rm -p 8080:8080 quarkus/events-service
 #
 ###
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3
-WORKDIR /work/
-RUN chown 1001 /work \
-    && chmod "g+rwX" /work \
-    && chown 1001:root /work
-COPY --chown=1001:root target/*-runner /work/application
+FROM alpine
 
-EXPOSE 8080
+RUN apk add openjdk11-jre
+
+COPY native/*-runner.jar app.jar
+
+EXPOSE 8082
 USER 1001
 
-CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
+ENTRYPOINT [ "java","-jar","app.jar" ]

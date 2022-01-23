@@ -29,7 +29,7 @@ public class EventsServiceSpringApplication {
 	@EventListener(ApplicationReadyEvent.class)
 	public void loadInitialData() {
 		eventsRepo.deleteAll();
-		for(int i = 0; i < 100000; i++){
+		for(int i = 0; i < 300; i++){
             Event event = null;
             if(i % 2 == 0){
                 event = new Event.EventBuilder()

@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  sportsevents-quarkus-native-app:
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    image: sportsevents-quarkus-native:1.0.0-SNAPSHOT
+    ports:
+      - "8082:8082"
+    depends_on:
+      - sportsevents-quarkus-db
+      - keycloak
+      - monitoring
+    environment:
+      KC_HOST: keycloak
+      KC_PORT: 8080
+      DB_HOST: sportsevents-quarkus-db
+      DB_PORT: 5432
+networks: 
+  default:
+      name: app-network

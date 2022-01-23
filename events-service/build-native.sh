@@ -1,0 +1,1 @@
+docker build . -f src/main/docker/Dockerfile.native -t sportsevents-quarkus-native:1.0.0-SNAPSHOT --no-cache
