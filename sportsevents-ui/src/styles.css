@@ -4,7 +4,7 @@ html, body{
   height: 100vh;
   width: 100%;
   margin: 0;
-  font-family: 'Lora', serif;
+  font-family: arial, "Times New Roman", Times;
   overflow: hidden;
 }
 
@@ -186,4 +186,4 @@ select.is-invalid {
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: arial, "Times New Roman", Times; }

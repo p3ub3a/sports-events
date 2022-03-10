@@ -13,6 +13,17 @@ export const quarkus_environment = {
   api_host: 'http://localhost:8082'
 };
 
+export const quarkus_native_environment = {
+  env: "quarkus",
+  production: false,
+  keycloak: {
+    issuer: 'http://localhost:8081/auth/',
+    realm: 'sportsevents-realm',
+    clientId: 'sportsevents-portal'
+  },
+  api_host: 'http://localhost:8083'
+};
+
 export const spring_environment = {
   env: "spring-boot",
   production: false,
@@ -24,7 +35,7 @@ export const spring_environment = {
   api_host: 'http://localhost:8089'
 };
 
-export const current_environment = spring_environment;
+export const current_environment = quarkus_native_environment;
 
 /*
  * For easier debugging in development mode, you can import the following file

@@ -30,7 +30,7 @@ public class InitialData {
                 event = new Event.EventBuilder()
                     .name(EventFactory.PINGPONG_EVENT_NAME)
                     .duration(EventFactory.PINGPONG_EVENT_DURATION)
-                    .scheduledDate(LocalDateTime.of(2022,Month.FEBRUARY, 22, 12, 30))
+                    .scheduledDate(LocalDateTime.of(2022,Month.AUGUST, 22, 12, 30))
                     .isOutdoors(true)
                     .location("Bucuresti")
                     .facilitator("facilitator")
@@ -51,7 +51,7 @@ public class InitialData {
                     .maxPlayers(EventFactory.CHESS_EVENT_MAX_PLAYERS)
                     .players(new String[]{"gica", "gica2"})
                     .winner(new Random().nextBoolean() ? "gica" : "gica2")
-                    .closedDate(LocalDateTime.of(2022,Month.DECEMBER, 3, 10, 30))
+                    .closedDate(LocalDateTime.of(2021,Month.DECEMBER, 3, 10, 30))
                     .build();
             }
             event.persist();

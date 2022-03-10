@@ -14,13 +14,13 @@
 # docker run -i --rm -p 8080:8080 quarkus/events-service
 #
 ###
-FROM alpine
+FROM alpine:3.15
 
 RUN apk add openjdk11-jre
 
-COPY native/*-runner.jar app.jar
+COPY native/*-runner.jar /deployments/app.jar
 
 EXPOSE 8082
 USER 1001
 
-ENTRYPOINT [ "java","-jar","app.jar" ]
+ENTRYPOINT [ "java","-Djava.security.egd=file:/dev/./urandom","-jar","/deployments/app.jar" ]
