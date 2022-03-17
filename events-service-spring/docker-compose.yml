@@ -6,10 +6,10 @@ services:
     image: sportsevents-springboot:1.0.0-SNAPSHOT
     ports:
       - "8089:8089"
-    depends_on:
-      - sportsevents-spring-db
-      - keycloak
-      - monitoring
+    # depends_on:
+    #   - sportsevents-spring-db
+    #   - keycloak
+    #   - monitoring
     environment:
       KC_HOST: keycloak
       KC_PORT: 8080
