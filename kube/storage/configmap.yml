@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-configmap
+data:
+  kc-host: "keycloak-service"
+  kc-port: "8081"
+  qk-db-host: "quarkus-postgres-service"
+  sb-db-host: "springboot-postgres-service"
+  qk-db-port: "5433"
+  sb-db-port: "5434"

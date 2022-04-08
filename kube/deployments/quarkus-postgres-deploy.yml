@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: quarkus-postgres-deployment
+  name: quarkus-postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quarkus-postgres-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: quarkus-postgres-deployment
+    spec:
+      containers:
+      - image: postgres:14.2
+        name: qk-postgres
+        env:
+          - name: POSTGRES_USER
+            valueFrom: 
+              secretKeyRef:
+                name: db-secret
+                key: db-username
+          - name: POSTGRES_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: db-secret
+                key: db-password
+          - name: POSTGRES_DB
+            valueFrom: 
+              secretKeyRef:
+                name: db-secret
+                key: db-name
+        ports:
+          - containerPort: 5432
+        resources: {}
+status: {}

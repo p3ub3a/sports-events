@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: keycloak-postgres-deployment
+  name: keycloak-postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak-postgres-deployment
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: keycloak-postgres-deployment
+    spec:
+      containers:
+      - image: postgres:14.2
+        name: kc-postgres
+        env:
+          - name: POSTGRES_USER
+            value: keycloak
+          - name: POSTGRES_PASSWORD
+            value: keycloak
+          - name: POSTGRES_DB
+            value: keycloak
+        ports:
+          - containerPort: 5432
+        resources: {}
+status: {}
