@@ -1,3 +1,4 @@
 .DS_STORE
 postgres_data
 */dependency-check-report.html
+*.log

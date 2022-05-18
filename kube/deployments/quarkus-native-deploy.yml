@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: quarkus-native
+  name: quarkus-native
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: quarkus-native
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: quarkus-native
+    spec:
+      containers:
+      - image: sportsevents-quarkus-native:1.0.0-SNAPSHOT
+        imagePullPolicy: IfNotPresent
+        name: quarkus-native
+        readinessProbe:
+          tcpSocket:
+            port: 8082
+          initialDelaySeconds: 1
+          periodSeconds: 1
+        env:
+          - name: DB_USER
+            valueFrom: 
+              secretKeyRef:
+                name: db-secret
+                key: db-username
+          - name: DB_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: db-secret
+                key: db-password
+          - name: DB_NAME
+            valueFrom: 
+              secretKeyRef:
+                name: db-secret
+                key: db-name
+          - name: DB_HOST
+            valueFrom: 
+              configMapKeyRef:
+                name: app-configmap
+                key: qk-db-host
+          - name: DB_PORT
+            valueFrom: 
+              configMapKeyRef:
+                name: app-configmap
+                key: qk-db-port
+          - name: KC_HOST
+            valueFrom: 
+              configMapKeyRef:
+                name: app-configmap
+                key: kc-host
+          - name: KC_PORT
+            valueFrom: 
+              configMapKeyRef:
+                name: app-configmap
+                key: kc-port
+        ports:
+          - containerPort: 8082
+        resources:
+          limits:
+            memory: 500Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
