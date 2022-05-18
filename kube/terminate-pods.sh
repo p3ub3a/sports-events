@@ -2,7 +2,7 @@
 
 echo "Starting $1 busybox ... "
 
-kubectl apply -f ping/quarkus-jvm-ping.yml
+kubectl apply -f ping/$1-ping.yml
 
 echo "Waiting for $1 busybox to start..."
 
@@ -10,7 +10,7 @@ sleep 12
 
 echo "Terminating $1 pods ..."
 
-for i in {1..15}
+for i in {1..5}
 do
   POD_TO_KILL=$(kubectl get po --selector "app=$1" --output=name | head -n1)
   
@@ -18,6 +18,10 @@ do
     kubectl delete --force $POD_TO_KILL
   sleep 10
 done
+
+if [ -f "ping-$1.log" ] ; then
+    rm "ping-$1.log"
+fi
 
 kubectl logs ping-quarkus-jvm > ping-quarkus-jvm.log
 
