@@ -1,6 +1,0 @@
-[EXECUTABLE]
-events-service-1.0.1-SNAPSHOT-runner.exe
-
-[JDK_LIB]
-sunmscapi.dll
-

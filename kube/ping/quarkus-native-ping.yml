@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: ping-quarkus-native
+  name: ping-quarkus-native
+spec:
+  containers:
+  - args:
+    - sh
+    - -c
+    - while(true) do echo "\n Trying to connect to quarkus-native... "; wget -T1 -O- http://quarkus-native-service:8083/test-kube ; sleep 2; done
+    image: busybox
+    name: ping-quarkus-native
+    resources:
+      limits:
+        memory: 1G
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
