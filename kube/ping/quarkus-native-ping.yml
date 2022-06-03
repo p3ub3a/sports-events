@@ -9,7 +9,7 @@ spec:
   - args:
     - sh
     - -c
-    - while(true) do echo "\n Trying to connect to quarkus-native... "; wget -T1 -O- http://quarkus-native-service:8083/test-kube ; sleep 2; done
+    - while(true) do echo "\n Trying to connect to quarkus-native... "; time wget -T1 -O- http://quarkus-native-service:8083/test-kube ; sleep 0.1; done
     image: busybox
     name: ping-quarkus-native
     resources:

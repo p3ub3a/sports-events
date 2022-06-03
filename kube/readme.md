@@ -17,6 +17,6 @@ Is a script that tests the startup time and scalability of each application, it 
 Script steps:
 * check if arguments are valid;
 * start the ping application of the specified instance ($1);
-* iterate $3 times, at the end of each iteration sleep $2 seconds;
+* iterate $3 times, at the end of each iteration sleep $2 seconds. Remove a pod each iteration;
 * update *ping-result.log* with the result of the execution;
 * create *ping-$1.log* with the logs from the ping pod.

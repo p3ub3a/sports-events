@@ -9,7 +9,7 @@ spec:
   - args:
     - sh
     - -c
-    - while(true) do echo "\n Trying to connect to springboot... "; wget -T1 -O- http://springboot-service:8089/test-kube ; sleep 1.3; done
+    - while(true) do echo "\n Trying to connect to springboot... "; time wget -T1 -O- http://springboot-service:8089/test-kube ; sleep 0.1; done
     image: busybox
     name: ping-springboot
     resources:
