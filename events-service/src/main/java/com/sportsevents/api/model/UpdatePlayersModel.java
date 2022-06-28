@@ -2,6 +2,9 @@ package com.sportsevents.api.model;
 
 import javax.validation.constraints.NotNull;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection 
 public class UpdatePlayersModel {
     @NotNull
     private Long eventId;

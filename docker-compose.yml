@@ -72,6 +72,12 @@ services:
       - "127.0.0.1:9090:9090"
     volumes:
       - "./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml"
+  # sportsevents-ui:
+  #   stdin_open: true # docker run -i
+  #   tty: true        # docker run -t
+  #   image: sportsevents-ui:1.0.0-SNAPSHOT
+  #   ports:
+  #     - "80:80"
 networks: 
   default:  
       name: app-network

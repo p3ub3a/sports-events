@@ -3,6 +3,9 @@ package com.sportsevents.api.model;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection 
 public class PageRequest {
 
     @QueryParam("type") 

@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.sportsevents.entity.Event;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection 
 public class GetEventsResponse {
     private int futurePagesNr;
     private int pastPagesNr;

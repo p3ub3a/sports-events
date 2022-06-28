@@ -1,5 +1,8 @@
 package com.sportsevents.api.model;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection 
 public class LeaderboardEntryModel {
     private Long rank;
     private String playerName;

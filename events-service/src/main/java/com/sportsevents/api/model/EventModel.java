@@ -8,6 +8,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection 
 public class EventModel {
     
     private Long id;
