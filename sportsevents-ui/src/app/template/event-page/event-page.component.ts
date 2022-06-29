@@ -101,7 +101,11 @@ export class EventPageComponent implements OnInit, OnDestroy {
     
     closeEvent(event): void{
       event.winner = this.selectedWinner;
-      this.closeEventSubscription = this.eventService.closeEvent(event).subscribe();
+      this.closeEventSubscription = this.eventService.closeEvent(event).subscribe({
+          complete: () => {
+            this.showDetails(this.selectedEvent);
+          }
+      });
     }
   
     selected(): void{

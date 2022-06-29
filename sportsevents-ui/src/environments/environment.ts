@@ -35,7 +35,7 @@ export const spring_environment = {
   api_host: 'http://localhost:8089'
 };
 
-export const current_environment = spring_environment;
+export const current_environment = quarkus_environment;
 
 /*
  * For easier debugging in development mode, you can import the following file
